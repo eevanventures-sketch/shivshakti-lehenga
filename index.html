@@ -30,15 +30,22 @@
         <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
             <div>
                 <span class="text-[9px] tracking-widest uppercase text-amber-700 font-bold flex items-center gap-1">
-                    <i class="fa-solid fa-crown text-amber-600"></i> रॉयल ब्राइडल बुटीक
+                    <i class="fa-solid fa-crown text-amber-600"></i> <span id="hdrSub">रॉयल ब्राइडल बुटीक</span>
                 </span>
                 <h1 id="hdrShop" class="text-2xl font-extrabold text-[#5B1024] royal-title leading-tight">
                     शिवशक्ति लहंगा हाउस
                 </h1>
             </div>
-            <button onclick="switchTab('profile')" class="w-10 h-10 rounded-full bg-white border border-[#D9C4A9] text-[#5B1024] flex items-center justify-center shadow-sm" title="प्रोफाइल & QR">
-                <i class="fa-solid fa-user-tie text-base text-amber-700"></i>
-            </button>
+            
+            <!-- Language Switcher & Profile Lock Icon -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleLang()" class="bg-white border border-[#D9C4A9] text-[#5B1024] text-xs px-2.5 py-1.5 rounded-full font-bold shadow-sm active:scale-95 transition">
+                    🌐 <span id="langTxt">English</span>
+                </button>
+                <button onclick="authAndSwitch('profile')" class="w-9 h-9 rounded-full bg-white border border-[#D9C4A9] text-[#5B1024] flex items-center justify-center shadow-sm" title="ओनर प्रोफाइल">
+                    <i class="fa-solid fa-lock text-sm text-amber-700"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -47,27 +54,38 @@
 
         <!-- 1. CATALOG TAB -->
         <div id="tabCatalog">
+            <!-- Special Offers & Discount Banner -->
+            <div class="p-3 mb-3 rounded-2xl bg-gradient-to-r from-amber-100 via-rose-100 to-amber-100 border border-amber-300 text-xs shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="bg-[#8E1634] text-amber-100 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">धमाका ऑफर</span>
+                    <p class="font-bold text-[#5B1024] mt-1" id="offerBannerText">₹3000+ की बुकिंग पर 10% की सीधी छूट!</p>
+                    <p class="text-[10px] text-gray-600">कूपन कोड का उपयोग करें: <b class="text-rose-700 font-mono">SHIV10</b></p>
+                </div>
+                <div class="text-2xl text-amber-600 pl-2">🎁</div>
+            </div>
+
+            <!-- Search -->
             <div class="mb-3">
                 <input type="text" id="searchInput" oninput="renderCatalog()" placeholder="🔍 लहंगा, गाउन या ज्वेलरी खोजें..." class="w-full px-4 py-2.5 bg-white border border-[#E7DAC7] rounded-xl text-xs shadow-sm focus:outline-none">
             </div>
 
             <!-- Category Pills -->
             <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs font-semibold">
-                <button onclick="filterCat('All')" class="cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shrink-0" data-cat="All">सभी</button>
-                <button onclick="filterCat('लहंगा')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="लहंगा">👗 लहंगा</button>
-                <button onclick="filterCat('गाउन')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="गाउन">💃 गाउन</button>
-                <button onclick="filterCat('चुनरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="चुनरी">🥻 चुनरी</button>
-                <button onclick="filterCat('ज्वेलरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="ज्वेलरी">👑 ज्वेलरी</button>
+                <button onclick="filterCat('All')" class="cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shrink-0" data-cat="All" id="catAll">सभी</button>
+                <button onclick="filterCat('लहंगा')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="लहंगा" id="catLeh">👗 लहंगा</button>
+                <button onclick="filterCat('गाउन')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="गाउन" id="catGown">💃 गाउन</button>
+                <button onclick="filterCat('चुनरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="चुनरी" id="catChun">🥻 चुनरी</button>
+                <button onclick="filterCat('ज्वेलरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="ज्वेलरी" id="catJew">👑 ज्वेलरी</button>
             </div>
 
             <div id="catalogGrid" class="space-y-4 mt-3"></div>
         </div>
 
-        <!-- 2. INVENTORY TAB (EDIT / REMOVE / SOLD) -->
+        <!-- 2. INVENTORY TAB (LOCKED WITH PIN) -->
         <div id="tabInventory" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4 flex justify-between items-center">
                 <div>
-                    <h3 class="font-bold text-base text-[#5B1024] royal-title">सामान प्रबंधन</h3>
+                    <h3 class="font-bold text-base text-[#5B1024] royal-title" id="invTitleHdr">सामान प्रबंधन</h3>
                     <p class="text-[11px] text-gray-500">एडिट करें, फोटो हटाएं या सोल्ड करें</p>
                 </div>
                 <button onclick="openProductModal()" class="bg-[#8E1634] text-amber-100 text-xs px-3.5 py-2 rounded-xl font-bold shadow">
@@ -77,19 +95,23 @@
             <div id="inventoryList" class="space-y-3"></div>
         </div>
 
-        <!-- 3. KHATA / ORDERS TAB -->
+        <!-- 3. KHATA / ORDERS TAB (LOCKED WITH PIN) -->
         <div id="tabKhata" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4">
-                <h3 class="font-bold text-base text-[#5B1024] royal-title"><i class="fa-solid fa-receipt text-amber-600 mr-1"></i> डिजिटल खाता</h3>
+                <h3 class="font-bold text-base text-[#5B1024] royal-title" id="khataTitleHdr"><i class="fa-solid fa-receipt text-amber-600 mr-1"></i> डिजिटल खाता</h3>
                 <p class="text-[11px] text-gray-500">बुकिंग रसीद, बाकी पेमेंट और WhatsApp/SMS रिमाइंडर</p>
             </div>
             <div id="ledgerList" class="space-y-3"></div>
         </div>
 
-        <!-- 4. PROFILE & QR TAB -->
+        <!-- 4. PROFILE & QR TAB (LOCKED WITH PIN) -->
         <div id="tabProfile" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-5 rounded-2xl shadow-sm space-y-4">
-                <h3 class="font-bold text-base text-gray-900 royal-title border-b pb-2">ओनर प्रोफाइल एवं पेमेंट QR सेटिंग्स</h3>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h3 class="font-bold text-base text-gray-900 royal-title" id="profTitleHdr">ओनर प्रोफाइल एवं QR सेटिंग्स</h3>
+                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">🔐 सुरक्षित</span>
+                </div>
+
                 <form onsubmit="saveProfile(event)" class="space-y-3 text-xs">
                     <div>
                         <label class="block font-bold text-gray-700 mb-1">दुकान का नाम:</label>
@@ -106,13 +128,23 @@
                         <label class="block font-bold text-gray-700 mb-1">दुकान का पता:</label>
                         <textarea id="profAddress" rows="2" class="w-full border p-2.5 rounded-xl"></textarea>
                     </div>
+                    
                     <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
                         <label class="block font-bold text-amber-900 mb-1">
-                            <i class="fa-solid fa-qrcode mr-1"></i> आपकी UPI ID (QR बारकोड के लिए):
+                            <i class="fa-solid fa-qrcode mr-1"></i> आपकी UPI ID (पेमेंट QR बारकोड हेतु):
                         </label>
-                        <input type="text" id="profUpi" placeholder="उदा. 9893XXXXXX@upi या yourname@okhdfcbank" class="w-full border p-2.5 rounded-xl bg-white font-mono">
-                        <p class="text-[10px] text-amber-800 mt-1">ग्राहक एडवांस जमा करते समय इसी UPI ID का QR स्कैन करेगा।</p>
+                        <input type="text" id="profUpi" placeholder="उदा. 9893XXXXXX@upi" class="w-full border p-2.5 rounded-xl bg-white font-mono">
                     </div>
+
+                    <!-- Change Master PIN -->
+                    <div class="p-3 bg-rose-50 rounded-xl border border-rose-200">
+                        <label class="block font-bold text-rose-900 mb-1">
+                            <i class="fa-solid fa-key mr-1"></i> 4-अंकों का मास्टर सिक्योरिटी पिन:
+                        </label>
+                        <input type="password" id="profPin" maxlength="4" placeholder="डिफ़ॉल्ट 1234" class="w-full border p-2.5 rounded-xl bg-white font-mono text-center tracking-widest text-sm">
+                        <p class="text-[10px] text-rose-800 mt-1">यह पिन खाता व प्रोफाइल को दूसरों से सुरक्षित रखता है।</p>
+                    </div>
+
                     <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3 rounded-xl shadow">
                         प्रोफाइल व QR सुरक्षित करें
                     </button>
@@ -128,20 +160,20 @@
 
     </main>
 
-    <!-- Bottom App Navigation Bar -->
+    <!-- Bottom Navigation Bar -->
     <nav class="fixed bottom-0 left-0 right-0 bg-[#FAF6F0]/95 backdrop-blur-md border-t border-[#E7DAC7] z-40 py-2">
         <div class="max-w-md mx-auto px-4 flex justify-between items-center text-xs">
             <button onclick="switchTab('catalog')" id="navCatalog" class="flex flex-col items-center text-[#8E1634] font-bold">
-                <i class="fa-solid fa-store text-lg"></i><span class="text-[10px] mt-0.5">कैटलॉग</span>
+                <i class="fa-solid fa-store text-lg"></i><span class="text-[10px] mt-0.5" id="navLblCatalog">कैटलॉग</span>
             </button>
-            <button onclick="switchTab('inventory')" id="navInventory" class="flex flex-col items-center text-gray-400 font-medium">
-                <i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-[10px] mt-0.5">सामान एडिट</span>
+            <button onclick="authAndSwitch('inventory')" id="navInventory" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-[10px] mt-0.5" id="navLblInv">सामान एडिट 🔒</span>
             </button>
-            <button onclick="switchTab('khata')" id="navKhata" class="flex flex-col items-center text-gray-400 font-medium">
-                <i class="fa-solid fa-receipt text-lg"></i><span class="text-[10px] mt-0.5">खाता</span>
+            <button onclick="authAndSwitch('khata')" id="navKhata" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-receipt text-lg"></i><span class="text-[10px] mt-0.5" id="navLblKhata">खाता 🔒</span>
             </button>
-            <button onclick="switchTab('profile')" id="navProfile" class="flex flex-col items-center text-gray-400 font-medium">
-                <i class="fa-solid fa-gear text-lg"></i><span class="text-[10px] mt-0.5">प्रोफाइल & QR</span>
+            <button onclick="authAndSwitch('profile')" id="navProfile" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-gear text-lg"></i><span class="text-[10px] mt-0.5" id="navLblProf">प्रोफाइल 🔒</span>
             </button>
         </div>
     </nav>
@@ -154,7 +186,26 @@
         <p class="font-bold text-gray-700">Powered by Eevan Ventures</p>
     </footer>
 
-    <!-- ================= MODAL 1: PRODUCT DETAILS & ADVANCE CHECKOUT ================= -->
+    <!-- ================= SECURITY PIN LOCK MODAL ================= -->
+    <div id="pinModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-6 text-center shadow-2xl">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-[#8E1634] flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-bold text-base text-gray-900 royal-title">मालिक सुरक्षा पिन</h3>
+            <p class="text-xs text-gray-500 mt-1 mb-4">यह सेक्शन केवल दुकान मालिक के लिए है। कृपया 4-अंकों का पिन दर्ज करें:</p>
+            
+            <input type="password" id="inputPin" maxlength="4" placeholder="••••" class="w-full text-center text-2xl tracking-widest font-mono border-2 border-amber-300 rounded-xl p-2.5 mb-2 focus:outline-none focus:border-[#8E1634]">
+            <p id="pinError" class="text-xs text-red-600 font-semibold mb-3 hidden">गलत पिन! पुनः प्रयास करें।</p>
+            
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <button onclick="closeModal('pinModal')" class="bg-gray-100 py-2.5 rounded-xl font-bold text-gray-600">रद्द करें</button>
+                <button onclick="verifyPin()" class="bg-[#8E1634] text-white py-2.5 rounded-xl font-bold shadow">अनलॉक करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL 1: PRODUCT DETAILS & ADVANCE WITH COUPONS ================= -->
     <div id="bookingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full max-h-[92vh] overflow-y-auto p-5 pb-8 shadow-2xl">
             <div class="flex justify-between items-start border-b pb-2">
@@ -202,6 +253,18 @@
                     <label class="block font-bold text-gray-700 mb-1">कार्यक्रम की तारीख चुनें:</label>
                     <input type="date" id="bookDate" onchange="checkDate()" class="w-full border p-2.5 rounded-xl bg-gray-50 text-xs font-semibold" required>
                     <p id="availMsg" class="text-[11px] font-bold mt-1.5"></p>
+                </div>
+
+                <!-- DISCOUNT / COUPON SECTION -->
+                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                    <label class="block font-bold text-amber-950 mb-1">
+                        <i class="fa-solid fa-tag text-amber-600 mr-1"></i> कूपन कोड / ऑफर लागू करें:
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="text" id="couponInput" placeholder="उदा. SHIV10" class="w-full border p-2 rounded-lg bg-white uppercase font-mono text-xs">
+                        <button type="button" onclick="applyCoupon()" class="bg-[#8E1634] text-amber-100 px-4 py-2 rounded-lg font-bold shrink-0">लागू करें</button>
+                    </div>
+                    <p id="couponMsg" class="text-[10px] mt-1 font-bold"></p>
                 </div>
 
                 <!-- Advance Chips & QR -->
@@ -265,6 +328,7 @@
 
             <div class="space-y-1.5 py-1">
                 <div class="flex justify-between"><span>कुल तय राशि:</span><b id="invTotal"></b></div>
+                <div class="flex justify-between text-emerald-700" id="invDiscRow"><span>ऑफर डिस्काउंट छूट:</span><b id="invDisc"></b></div>
                 <div class="flex justify-between text-emerald-700"><span>जमा टोकन एडवांस:</span><b id="invAdv"></b></div>
                 <div class="flex justify-between text-rose-700 font-bold text-sm pt-1 border-t"><span>बाकी बकाया:</span><span id="invDue"></span></div>
                 <div class="flex justify-between text-gray-500 text-[10px]"><span>सिक्योरिटी (वापसी योग्य):</span><span id="invSec"></span></div>
@@ -319,13 +383,11 @@
                     <textarea id="pDesc" rows="2" placeholder="फैब्रिक, वर्क, साइज आदि..." class="w-full border p-2.5 rounded-xl"></textarea>
                 </div>
 
-                <!-- Existing Photos (With Red X button to delete wrong photo) -->
                 <div>
                     <label class="block font-bold mb-1 text-gray-700">वर्तमान फ़ोटो (हटाने के लिए ❌ दबाएँ):</label>
                     <div id="curPhotos" class="flex gap-2 overflow-x-auto py-1 hide-scrollbar min-h-[50px]"></div>
                 </div>
 
-                <!-- Add New Photos -->
                 <div>
                     <label class="block font-bold mb-1 text-[#8E1634]">
                         <i class="fa-solid fa-camera mr-1"></i> गैलरी से 2 से 10 नई फ़ोटो चुनें:
@@ -364,12 +426,17 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        let currentLang = "hi";
+        let isOwnerAuthenticated = false;
+        let pendingTargetTab = null;
+
         const defProfile = {
             shop: "शिवशक्ति लहंगा हाउस",
             owner: "शिवशक्ति प्रोप्राइटर",
             phone: "919999999999",
             address: "मेन मार्केट, भारत",
-            upi: "shivshakti@upi"
+            upi: "shivshakti@upi",
+            pin: "1234"
         };
 
         const defProducts = [
@@ -409,6 +476,8 @@
         ];
 
         let profile = JSON.parse(localStorage.getItem("ss_prof")) || defProfile;
+        if (!profile.pin) profile.pin = "1234";
+
         let products = JSON.parse(localStorage.getItem("ss_prods")) || defProducts;
         let bookings = JSON.parse(localStorage.getItem("ss_books")) || [];
 
@@ -416,6 +485,7 @@
         let photoIdx = 0;
         let bookType = "Rent";
         let advAmt = 500;
+        let discountAmt = 0;
         let editPhotos = [];
         let newUploaded = [];
         let lastBooking = null;
@@ -426,6 +496,62 @@
             localStorage.setItem("ss_books", JSON.stringify(bookings));
         }
 
+        // Language Switcher (Hindi / English)
+        function toggleLang() {
+            currentLang = currentLang === "hi" ? "en" : "hi";
+            document.getElementById("langTxt").innerText = currentLang === "hi" ? "English" : "हिंदी";
+            
+            if (currentLang === "en") {
+                document.getElementById("hdrSub").innerText = "ROYAL BRIDAL BOUTIQUE";
+                document.getElementById("offerBannerText").innerText = "Flat 10% OFF on bookings above ₹3000!";
+                document.getElementById("catAll").innerText = "All";
+                document.getElementById("catLeh").innerText = "👗 Lehenga";
+                document.getElementById("catGown").innerText = "💃 Gown";
+                document.getElementById("catChun").innerText = "🥻 Chunri";
+                document.getElementById("catJew").innerText = "👑 Jewellery";
+                document.getElementById("navLblCatalog").innerText = "Catalog";
+                document.getElementById("navLblInv").innerText = "Inventory 🔒";
+                document.getElementById("navLblKhata").innerText = "Khata 🔒";
+                document.getElementById("navLblProf").innerText = "Profile 🔒";
+            } else {
+                document.getElementById("hdrSub").innerText = "रॉयल ब्राइडल बुटीक";
+                document.getElementById("offerBannerText").innerText = "₹3000+ की बुकिंग पर 10% की सीधी छूट!";
+                document.getElementById("catAll").innerText = "सभी";
+                document.getElementById("catLeh").innerText = "👗 लहंगा";
+                document.getElementById("catGown").innerText = "💃 गाउन";
+                document.getElementById("catChun").innerText = "🥻 चुनरी";
+                document.getElementById("catJew").innerText = "👑 ज्वेलरी";
+                document.getElementById("navLblCatalog").innerText = "कैटलॉग";
+                document.getElementById("navLblInv").innerText = "सामान एडिट 🔒";
+                document.getElementById("navLblKhata").innerText = "खाता 🔒";
+                document.getElementById("navLblProf").innerText = "प्रोफाइल 🔒";
+            }
+            renderCatalog();
+        }
+
+        // Security PIN Authentication Check
+        function authAndSwitch(tabName) {
+            if (isOwnerAuthenticated) {
+                switchTab(tabName);
+            } else {
+                pendingTargetTab = tabName;
+                document.getElementById("inputPin").value = "";
+                document.getElementById("pinError").classList.add("hidden");
+                openModal("pinModal");
+            }
+        }
+
+        function verifyPin() {
+            const entered = document.getElementById("inputPin").value;
+            if (entered === profile.pin) {
+                isOwnerAuthenticated = true;
+                closeModal("pinModal");
+                switchTab(pendingTargetTab);
+            } else {
+                document.getElementById("pinError").classList.remove("hidden");
+            }
+        }
+
         function initProfile() {
             document.getElementById("hdrShop").innerText = profile.shop;
             document.getElementById("profShop").value = profile.shop;
@@ -433,6 +559,7 @@
             document.getElementById("profPhone").value = profile.phone;
             document.getElementById("profAddress").value = profile.address;
             document.getElementById("profUpi").value = profile.upi;
+            document.getElementById("profPin").value = profile.pin;
 
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${profile.upi}&pn=${profile.shop}&cu=INR`)}`;
             document.getElementById("profileQrImg").src = qrUrl;
@@ -446,9 +573,10 @@
             profile.phone = document.getElementById("profPhone").value;
             profile.address = document.getElementById("profAddress").value;
             profile.upi = document.getElementById("profUpi").value || "pay@upi";
+            profile.pin = document.getElementById("profPin").value || "1234";
             save();
             initProfile();
-            alert("प्रोफाइल व QR सुरक्षित हो गया!");
+            alert("ओनर प्रोफाइल, नया पिन व QR सुरक्षित हो गया!");
         }
 
         // Render Catalog
@@ -461,7 +589,7 @@
             if (search) items = items.filter(p => p.title.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
 
             if (!items.length) {
-                grid.innerHTML = `<div class="text-center py-10 text-gray-400 text-xs">कोई सामान नहीं मिला।</div>`;
+                grid.innerHTML = `<div class="text-center py-10 text-gray-400 text-xs">${currentLang === 'hi' ? 'कोई सामान नहीं मिला।' : 'No items found.'}</div>`;
                 return;
             }
 
@@ -490,11 +618,11 @@
                         </div>
                         <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.desc || ''}</p>
                         <div class="grid grid-cols-2 gap-2 mt-3 pt-2 border-t text-xs">
-                            <div><span class="text-gray-400 block text-[10px]">किराया</span><b class="text-[#8E1634] text-base">₹${p.rentPrice}</b></div>
-                            <div class="text-right"><span class="text-gray-400 block text-[10px]">सेल</span><b class="text-emerald-700 text-base">₹${p.salePrice}</b></div>
+                            <div><span class="text-gray-400 block text-[10px]">${currentLang === 'hi' ? 'किराया' : 'Rent'}</span><b class="text-[#8E1634] text-base">₹${p.rentPrice}</b></div>
+                            <div class="text-right"><span class="text-gray-400 block text-[10px]">${currentLang === 'hi' ? 'सेल' : 'Sale'}</span><b class="text-emerald-700 text-base">₹${p.salePrice}</b></div>
                         </div>
                         <button onclick="openDetails(${p.id})" class="w-full mt-3 bg-[#8E1634] text-amber-100 py-2.5 rounded-xl font-bold text-xs shadow">
-                            तारीख व पूरी डिटेल देखें
+                            ${currentLang === 'hi' ? 'तारीख व पूरी डिटेल देखें' : 'View Dates & Details'}
                         </button>
                     </div>
                 `;
@@ -509,7 +637,6 @@
             renderCatalog(cat);
         }
 
-        // Like Button Working
         function toggleLike(id) {
             const p = products.find(x => x.id === id);
             p.liked = !p.liked;
@@ -518,19 +645,19 @@
             renderCatalog();
         }
 
-        // WhatsApp Share
         function shareWhatsApp(id) {
             const p = products.find(x => x.id === id);
             const msg = `🌸 *${profile.shop}*\n👗 *${p.title}*\n🏷️ किराया: ₹${p.rentPrice} | सेल: ₹${p.salePrice}\n👉 देखें: ${window.location.href}`;
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Booking Details
+        // Booking & Details
         function openDetails(id) {
             selProd = products.find(x => x.id === id);
             photoIdx = 0;
             bookType = "Rent";
             advAmt = 500;
+            discountAmt = 0;
 
             document.getElementById("mTitle").innerText = selProd.title;
             document.getElementById("mCat").innerText = selProd.category;
@@ -538,6 +665,8 @@
             document.getElementById("mRent").innerText = `₹${selProd.rentPrice}`;
             document.getElementById("mSale").innerText = `₹${selProd.salePrice}`;
             document.getElementById("mSecurity").innerText = `₹${selProd.security}`;
+            document.getElementById("couponInput").value = "";
+            document.getElementById("couponMsg").innerText = "";
             
             updateSlider();
             setType("Rent");
@@ -577,6 +706,33 @@
             }
         }
 
+        // Apply Coupon Code
+        function applyCoupon() {
+            const code = document.getElementById("couponInput").value.trim().toUpperCase();
+            const msg = document.getElementById("couponMsg");
+            const price = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+
+            if (code === "SHIV10") {
+                if (price >= 2000) {
+                    discountAmt = Math.round(price * 0.10);
+                    msg.className = "text-[10px] mt-1 font-bold text-emerald-700";
+                    msg.innerText = `बधाई! 10% की छूट लागू हो गई: -₹${discountAmt}`;
+                } else {
+                    msg.className = "text-[10px] mt-1 font-bold text-red-600";
+                    msg.innerText = `यह कूपन ₹2000 से अधिक पर ही मान्य है।`;
+                }
+            } else if (code === "FESTIVE300") {
+                discountAmt = 300;
+                msg.className = "text-[10px] mt-1 font-bold text-emerald-700";
+                msg.innerText = `बधाई! ₹300 की छूट लागू हो गई: -₹300`;
+            } else {
+                msg.className = "text-[10px] mt-1 font-bold text-red-600";
+                msg.innerText = `अमान्य कूपन कोड!`;
+                discountAmt = 0;
+            }
+            calcDue();
+        }
+
         function setAdv(amt) {
             advAmt = amt;
             document.getElementById("customAdv").value = "";
@@ -589,8 +745,9 @@
         function calcDue() {
             const c = Number(document.getElementById("customAdv").value);
             const finalAdv = c > 0 ? c : advAmt;
-            const total = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
-            document.getElementById("dueAmount").innerText = `₹${Math.max(0, total - finalAdv)}`;
+            const originalPrice = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+            const netPrice = Math.max(0, originalPrice - discountAmt);
+            document.getElementById("dueAmount").innerText = `₹${Math.max(0, netPrice - finalAdv)}`;
         }
 
         function handleBooking(e) {
@@ -606,8 +763,9 @@
                 return;
             }
 
-            const total = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
-            const due = Math.max(0, total - finalAdv);
+            const originalTotal = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+            const netTotal = Math.max(0, originalTotal - discountAmt);
+            const due = Math.max(0, netTotal - finalAdv);
 
             lastBooking = {
                 id: Date.now().toString().slice(-6),
@@ -618,7 +776,8 @@
                 phone: phone,
                 advance: finalAdv,
                 security: selProd.security,
-                total: total,
+                discount: discountAmt,
+                total: netTotal,
                 due: due,
                 createdAt: new Date().toLocaleDateString('hi-IN')
             };
@@ -630,12 +789,11 @@
             closeModal("bookingModal");
             openInvoice(lastBooking);
 
-            // Alert Shop Owner on WhatsApp
-            const msg = `🔔 *नई बुकिंग ALERT - ${profile.shop}*\n👗 सामान: ${selProd.title}\n👤 ग्राहक: ${name} (${phone})\n📅 तारीख: ${lastBooking.date}\n💵 एडवांस जमा: ₹${finalAdv}\n💰 बाकी देय: ₹${due}`;
+            const msg = `🔔 *नई बुकिंग ALERT - ${profile.shop}*\n👗 सामान: ${selProd.title}\n👤 ग्राहक: ${name} (${phone})\n📅 तारीख: ${lastBooking.date}\n🎁 छूट: ₹${discountAmt}\n💵 एडवांस जमा: ₹${finalAdv}\n💰 बाकी देय: ₹${due}`;
             window.open(`https://api.whatsapp.com/send?phone=${profile.phone}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Invoice Receipt Logic
+        // Invoice Receipt
         function openInvoice(b) {
             document.getElementById("invShop").innerText = profile.shop;
             document.getElementById("invPhone").innerText = `संपर्क: ${profile.phone}`;
@@ -648,6 +806,7 @@
             document.getElementById("invType").innerText = b.type;
             document.getElementById("invEvent").innerText = b.date;
             document.getElementById("invTotal").innerText = `₹${b.total}`;
+            document.getElementById("invDisc").innerText = `-₹${b.discount || 0}`;
             document.getElementById("invAdv").innerText = `₹${b.advance}`;
             document.getElementById("invDue").innerText = `₹${b.due}`;
             document.getElementById("invSec").innerText = `₹${b.security}`;
@@ -656,11 +815,11 @@
 
         function shareInvoice() {
             if (!lastBooking) return;
-            const msg = `🧾 *रसीद: ${profile.shop}*\nरसीद सं: #${lastBooking.id}\nग्राहक: ${lastBooking.customer}\nसामान: ${lastBooking.title}\nतारीख: ${lastBooking.date}\nकुल: ₹${lastBooking.total}\nएडवांस: ₹${lastBooking.advance}\nबाकी: ₹${lastBooking.due}`;
+            const msg = `🧾 *रसीद: ${profile.shop}*\nरसीद सं: #${lastBooking.id}\nग्राहक: ${lastBooking.customer}\nसामान: ${lastBooking.title}\nतारीख: ${lastBooking.date}\nछूट: ₹${lastBooking.discount || 0}\nकुल: ₹${lastBooking.total}\nएडवांस: ₹${lastBooking.advance}\nबाकी: ₹${lastBooking.due}`;
             window.open(`https://api.whatsapp.com/send?phone=91${lastBooking.phone}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Inventory Management (Edit, Delete, Remove Photo)
+        // Inventory
         function renderInventory() {
             const list = document.getElementById("inventoryList");
             list.innerHTML = "";
@@ -678,9 +837,9 @@
                         </div>
                     </div>
                     <div class="flex gap-1.5">
-                        <button onclick="editProduct(${p.id})" class="bg-gray-100 hover:bg-gray-200 text-gray-800 p-2 rounded-lg" title="एडिट करें"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="toggleSold(${p.id})" class="bg-amber-100 text-amber-900 p-2 rounded-lg font-bold" title="सोल्ड मार्क करें">${p.isSold ? 'अनसोल्ड' : 'सोल्ड'}</button>
-                        <button onclick="deleteProduct(${p.id})" class="bg-rose-100 text-rose-700 p-2 rounded-lg" title="हटाएं"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editProduct(${p.id})" class="bg-gray-100 text-gray-800 p-2 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="toggleSold(${p.id})" class="bg-amber-100 text-amber-900 p-2 rounded-lg font-bold">${p.isSold ? 'अनसोल्ड' : 'सोल्ड'}</button>
+                        <button onclick="deleteProduct(${p.id})" class="bg-rose-100 text-rose-700 p-2 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
                 list.appendChild(row);
@@ -737,7 +896,6 @@
             openModal("productModal");
         }
 
-        // Render & Delete Individual Photo (Red Cross ❌)
         function renderPhotosInModal() {
             const box = document.getElementById("curPhotos");
             box.innerHTML = "";
@@ -750,7 +908,7 @@
                 wrap.className = "relative shrink-0";
                 wrap.innerHTML = `
                     <img src="${img}" class="w-14 h-14 object-cover rounded-lg border">
-                    <button type="button" onclick="removePhoto(${i})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px] shadow" title="यह फोटो हटाएं">❌</button>
+                    <button type="button" onclick="removePhoto(${i})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px] shadow">❌</button>
                 `;
                 box.appendChild(wrap);
             });
@@ -761,7 +919,6 @@
             renderPhotosInModal();
         }
 
-        // Compress Multiple Photos from Phone
         function processFiles(event) {
             const files = event.target.files;
             newUploaded = [];
@@ -886,7 +1043,7 @@
             window.open(`sms:${phone}?body=${encodeURIComponent(`Namaste ${name} ji! ${profile.shop} se order ${item} (${date}) booked hai. Pending: Rs.${due}.`)}`, '_self');
         }
 
-        // Navigation Switcher
+        // Tab Navigation
         function switchTab(t) {
             ['Catalog', 'Inventory', 'Khata', 'Profile'].forEach(x => {
                 document.getElementById(`tab${x}`).classList.add('hidden');
@@ -904,10 +1061,10 @@
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // Start
+        // Start App
         initProfile();
         renderCatalog();
     </script>
 </body>
-</html>
+    </html>
 
