@@ -25,7 +25,7 @@
 </head>
 <body class="pb-28 antialiased">
 
-    <!-- Header -->
+    <!-- Top Navigation Header -->
     <header class="bg-[#FAF6F0]/95 backdrop-blur-md sticky top-0 z-40 border-b border-[#E7DAC7] shadow-sm">
         <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
             <div>
@@ -37,7 +37,6 @@
                 </h1>
             </div>
             
-            <!-- Language Switcher & Profile Lock Icon -->
             <div class="flex items-center gap-2">
                 <button onclick="toggleLang()" class="bg-white border border-[#D9C4A9] text-[#5B1024] text-xs px-2.5 py-1.5 rounded-full font-bold shadow-sm active:scale-95 transition">
                     🌐 <span id="langTxt">English</span>
@@ -49,19 +48,20 @@
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main Content Container -->
     <main class="max-w-md mx-auto px-4 pt-3">
 
         <!-- 1. CATALOG TAB -->
         <div id="tabCatalog">
-            <!-- Special Offers & Discount Banner -->
-            <div class="p-3 mb-3 rounded-2xl bg-gradient-to-r from-amber-100 via-rose-100 to-amber-100 border border-amber-300 text-xs shadow-sm flex items-center justify-between">
+            <!-- Dynamic Custom Offer Banner -->
+            <div id="offerBannerBox" class="p-3 mb-3 rounded-2xl bg-gradient-to-r from-amber-100 via-rose-100 to-amber-100 border border-amber-300 text-xs shadow-sm flex items-center justify-between">
                 <div>
-                    <span class="bg-[#8E1634] text-amber-100 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">धमाका ऑफर</span>
-                    <p class="font-bold text-[#5B1024] mt-1" id="offerBannerText">₹3000+ की बुकिंग पर 10% की सीधी छूट!</p>
-                    <p class="text-[10px] text-gray-600">कूपन कोड का उपयोग करें: <b class="text-rose-700 font-mono">SHIV10</b></p>
+                    <span class="bg-[#8E1634] text-amber-100 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase" id="offerTag">ऑफर</span>
+                    <p class="font-bold text-[#5B1024] mt-1" id="offerTitleDisplay">विशेष छूट ऑफर</p>
+                    <p class="text-[10px] text-gray-600"><span id="lblCouponUse">कोड का उपयोग करें:</span> <b class="text-rose-700 font-mono" id="offerCodeDisplay">SHIV10</b></p>
+                    <p class="text-[9px] text-gray-500 mt-0.5" id="offerDatesDisplay"></p>
                 </div>
-                <div class="text-2xl text-amber-600 pl-2">🎁</div>
+                <div class="text-3xl text-amber-600 pl-2">🎁</div>
             </div>
 
             <!-- Search -->
@@ -81,7 +81,7 @@
             <div id="catalogGrid" class="space-y-4 mt-3"></div>
         </div>
 
-        <!-- 2. INVENTORY TAB (LOCKED WITH PIN) -->
+        <!-- 2. INVENTORY TAB (PIN LOCKED) -->
         <div id="tabInventory" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4 flex justify-between items-center">
                 <div>
@@ -95,7 +95,7 @@
             <div id="inventoryList" class="space-y-3"></div>
         </div>
 
-        <!-- 3. KHATA / ORDERS TAB (LOCKED WITH PIN) -->
+        <!-- 3. KHATA / ORDERS TAB (PIN LOCKED) -->
         <div id="tabKhata" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4">
                 <h3 class="font-bold text-base text-[#5B1024] royal-title" id="khataTitleHdr"><i class="fa-solid fa-receipt text-amber-600 mr-1"></i> डिजिटल खाता</h3>
@@ -104,11 +104,11 @@
             <div id="ledgerList" class="space-y-3"></div>
         </div>
 
-        <!-- 4. PROFILE & QR TAB (LOCKED WITH PIN) -->
+        <!-- 4. PROFILE & OFFER MANAGEMENT TAB (PIN LOCKED) -->
         <div id="tabProfile" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-5 rounded-2xl shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-2">
-                    <h3 class="font-bold text-base text-gray-900 royal-title" id="profTitleHdr">ओनर प्रोफाइल एवं QR सेटिंग्स</h3>
+                    <h3 class="font-bold text-base text-gray-900 royal-title" id="profTitleHdr">ओनर प्रोफाइल एवं सेटिंग्स</h3>
                     <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">🔐 सुरक्षित</span>
                 </div>
 
@@ -136,17 +136,67 @@
                         <input type="text" id="profUpi" placeholder="उदा. 9893XXXXXX@upi" class="w-full border p-2.5 rounded-xl bg-white font-mono">
                     </div>
 
-                    <!-- Change Master PIN -->
+                    <!-- CUSTOM OFFER & DISCOUNT MANAGER -->
+                    <div class="p-3.5 bg-gradient-to-br from-amber-50 to-rose-50 rounded-xl border border-amber-300 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#5B1024] text-xs flex items-center gap-1">
+                                <i class="fa-solid fa-tags text-rose-600"></i> कस्टम ऑफर व कूपन सेटिंग्स
+                            </span>
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" id="offerActive" class="w-4 h-4 accent-[#8E1634]">
+                                <span class="text-[11px] font-bold text-gray-700">ऑफर चालू रखें</span>
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-700 text-[10px]">ऑफर का शीर्षक (Title):</label>
+                            <input type="text" id="offerTitle" placeholder="उदा. दिवाली व शादी स्पेशल ऑफर" class="w-full border p-2 rounded-lg bg-white text-xs">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-gray-700 text-[10px]">कूपन कोड:</label>
+                                <input type="text" id="offerCode" placeholder="उदा. FESTIVE20" class="w-full border p-2 rounded-lg bg-white uppercase font-mono text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-700 text-[10px]">छूट प्रकार व मूल्य:</label>
+                                <div class="flex gap-1">
+                                    <select id="offerType" class="border p-2 rounded-lg bg-white text-xs">
+                                        <option value="percent">% छूट</option>
+                                        <option value="flat">₹ फ्लैट</option>
+                                    </select>
+                                    <input type="number" id="offerVal" placeholder="10" class="w-full border p-2 rounded-lg bg-white text-xs">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-700 text-[10px]">न्यूनतम बुकिंग राशि (कम से कम ₹):</label>
+                            <input type="number" id="offerMin" placeholder="उदा. 2000" class="w-full border p-2 rounded-lg bg-white text-xs">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-gray-700 text-[10px]">आरंभ तिथि (Start Date):</label>
+                                <input type="date" id="offerStart" class="w-full border p-1.5 rounded-lg bg-white text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-700 text-[10px]">अंतिम तिथि (End Date):</label>
+                                <input type="date" id="offerEnd" class="w-full border p-1.5 rounded-lg bg-white text-xs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Change PIN -->
                     <div class="p-3 bg-rose-50 rounded-xl border border-rose-200">
                         <label class="block font-bold text-rose-900 mb-1">
                             <i class="fa-solid fa-key mr-1"></i> 4-अंकों का मास्टर सिक्योरिटी पिन:
                         </label>
                         <input type="password" id="profPin" maxlength="4" placeholder="डिफ़ॉल्ट 1234" class="w-full border p-2.5 rounded-xl bg-white font-mono text-center tracking-widest text-sm">
-                        <p class="text-[10px] text-rose-800 mt-1">यह पिन खाता व प्रोफाइल को दूसरों से सुरक्षित रखता है।</p>
                     </div>
 
                     <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3 rounded-xl shadow">
-                        प्रोफाइल व QR सुरक्षित करें
+                        प्रोफाइल व सेटिंग्स सुरक्षित करें
                     </button>
                 </form>
 
@@ -186,26 +236,50 @@
         <p class="font-bold text-gray-700">Powered by Eevan Ventures</p>
     </footer>
 
-    <!-- ================= SECURITY PIN LOCK MODAL ================= -->
+    <!-- ================= SECURITY PIN & OTP FORGOT MODAL ================= -->
     <div id="pinModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-xs w-full p-6 text-center shadow-2xl">
             <div class="w-12 h-12 rounded-full bg-rose-100 text-[#8E1634] flex items-center justify-center mx-auto mb-3 text-xl">
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <h3 class="font-bold text-base text-gray-900 royal-title">मालिक सुरक्षा पिन</h3>
-            <p class="text-xs text-gray-500 mt-1 mb-4">यह सेक्शन केवल दुकान मालिक के लिए है। कृपया 4-अंकों का पिन दर्ज करें:</p>
             
-            <input type="password" id="inputPin" maxlength="4" placeholder="••••" class="w-full text-center text-2xl tracking-widest font-mono border-2 border-amber-300 rounded-xl p-2.5 mb-2 focus:outline-none focus:border-[#8E1634]">
-            <p id="pinError" class="text-xs text-red-600 font-semibold mb-3 hidden">गलत पिन! पुनः प्रयास करें।</p>
-            
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <button onclick="closeModal('pinModal')" class="bg-gray-100 py-2.5 rounded-xl font-bold text-gray-600">रद्द करें</button>
-                <button onclick="verifyPin()" class="bg-[#8E1634] text-white py-2.5 rounded-xl font-bold shadow">अनलॉक करें</button>
+            <!-- Standard PIN Input View -->
+            <div id="pinStandardView">
+                <h3 class="font-bold text-base text-gray-900 royal-title">मालिक सुरक्षा पिन</h3>
+                <p class="text-xs text-gray-500 mt-1 mb-3">यह सेक्शन केवल दुकान मालिक के लिए है। पिन दर्ज करें:</p>
+                
+                <input type="password" id="inputPin" maxlength="4" placeholder="••••" class="w-full text-center text-2xl tracking-widest font-mono border-2 border-amber-300 rounded-xl p-2.5 mb-2 focus:outline-none focus:border-[#8E1634]">
+                <p id="pinError" class="text-xs text-red-600 font-semibold mb-2 hidden">गलत पिन! पुनः प्रयास करें।</p>
+                
+                <button type="button" onclick="startOtpReset()" class="text-[11px] text-[#8E1634] font-bold underline block mb-4">
+                    🔑 पिन भूल गए? OTP से बदलें
+                </button>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button onclick="closeModal('pinModal')" class="bg-gray-100 py-2.5 rounded-xl font-bold text-gray-600">रद्द करें</button>
+                    <button onclick="verifyPin()" class="bg-[#8E1634] text-white py-2.5 rounded-xl font-bold shadow">अनलॉक करें</button>
+                </div>
+            </div>
+
+            <!-- OTP Reset View -->
+            <div id="pinOtpView" class="hidden text-left">
+                <h3 class="font-bold text-sm text-[#8E1634] mb-1">📱 मालिक OTP वेरिफिकेशन</h3>
+                <p class="text-[11px] text-gray-600 mb-3" id="otpNotice">मालिक के नंबर पर 4-अंकों का OTP भेजा गया है:</p>
+
+                <div class="space-y-2 mb-3">
+                    <input type="number" id="inputOtp" placeholder="यहाँ OTP दर्ज करें" class="w-full text-center text-lg font-mono border rounded-xl p-2">
+                    <input type="password" id="inputNewPin" maxlength="4" placeholder="नया 4-अंकों का पिन" class="w-full text-center text-lg font-mono border rounded-xl p-2">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button type="button" onclick="cancelOtpReset()" class="bg-gray-100 py-2.5 rounded-xl font-bold text-gray-600">वापस</button>
+                    <button type="button" onclick="verifyOtpAndSetPin()" class="bg-emerald-600 text-white py-2.5 rounded-xl font-bold">पिन सेट करें</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ================= MODAL 1: PRODUCT DETAILS & ADVANCE WITH COUPONS ================= -->
+    <!-- ================= PRODUCT DETAILS, ZOOM, SLIDER & ADVANCE ================= -->
     <div id="bookingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full max-h-[92vh] overflow-y-auto p-5 pb-8 shadow-2xl">
             <div class="flex justify-between items-start border-b pb-2">
@@ -223,26 +297,38 @@
                 <button onclick="nextPhoto()" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-gray-800 flex items-center justify-center text-xs shadow">❯</button>
                 <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded-full" id="mCounter">1/1</div>
                 <div class="absolute bottom-2 left-2 bg-white/90 text-gray-700 text-[10px] px-2 py-0.5 rounded-full shadow font-semibold">
-                    <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>ज़ूम करें
+                    <i class="fa-solid fa-magnifying-glass-plus mr-1"></i><span id="lblZoom">ज़ूम करें</span>
                 </div>
             </div>
 
             <div class="mt-3 p-3 bg-[#FAF6F0] rounded-xl border border-[#E7DAC7] text-xs">
-                <h4 class="font-bold text-[#5B1024] mb-1">विवरण (Description):</h4>
+                <h4 class="font-bold text-[#5B1024] mb-1" id="lblDescHead">विवरण (Description):</h4>
                 <p id="mDesc" class="text-gray-700 leading-relaxed"></p>
             </div>
 
+            <!-- MATCHING COMBO SUGGESTION -->
+            <div id="comboSuggestionBox" class="mt-2 p-2.5 bg-rose-50/70 border border-rose-200 rounded-xl flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">👑</span>
+                    <div>
+                        <b class="text-[#8E1634] block text-[11px]" id="comboTitle">मैचिंग ब्राइडल ज्वेलरी कॉम्बो</b>
+                        <span class="text-[10px] text-gray-500" id="comboSub">साथ में ज्वेलरी लेने पर ₹200 की अतिरिक्त छूट!</span>
+                    </div>
+                </div>
+                <button type="button" onclick="applyComboOffer()" class="bg-[#8E1634] text-amber-100 text-[10px] px-2.5 py-1 rounded-lg font-bold">जोड़ें</button>
+            </div>
+
             <div class="grid grid-cols-2 gap-2 my-3 p-3 bg-white rounded-xl border border-gray-200 text-xs shadow-sm">
-                <div><span class="text-gray-400 block font-semibold text-[10px]">किराया मूल्य</span><b class="text-[#8E1634] text-base" id="mRent"></b></div>
-                <div><span class="text-gray-400 block font-semibold text-[10px]">सेल मूल्य</span><b class="text-emerald-700 text-base" id="mSale"></b></div>
+                <div><span class="text-gray-400 block font-semibold text-[10px]" id="lblRentTxt">किराया मूल्य</span><b class="text-[#8E1634] text-base" id="mRent"></b></div>
+                <div><span class="text-gray-400 block font-semibold text-[10px]" id="lblSaleTxt">सेल मूल्य</span><b class="text-emerald-700 text-base" id="mSale"></b></div>
                 <div class="col-span-2 pt-2 border-t flex justify-between items-center text-gray-600">
-                    <span>सिक्योरिटी डिपॉजिट (वापसी योग्य):</span><b class="text-gray-900" id="mSecurity"></b>
+                    <span id="lblSecTxt">सिक्योरिटी डिपॉजिट (वापसी योग्य):</span><b class="text-gray-900" id="mSecurity"></b>
                 </div>
             </div>
 
             <form onsubmit="handleBooking(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-gray-700 mb-1">विकल्प:</label>
+                    <label class="block font-bold text-gray-700 mb-1" id="lblOptTxt">विकल्प:</label>
                     <div class="grid grid-cols-2 gap-2">
                         <button type="button" onclick="setType('Rent')" id="btnRent" class="py-2 rounded-xl border-2 font-bold border-[#8E1634] bg-rose-50 text-[#8E1634]">किराए पर लें</button>
                         <button type="button" onclick="setType('Buy')" id="btnBuy" class="py-2 rounded-xl border-2 font-bold border-gray-200 text-gray-600">नया खरीदें</button>
@@ -250,26 +336,26 @@
                 </div>
 
                 <div id="dateBox">
-                    <label class="block font-bold text-gray-700 mb-1">कार्यक्रम की तारीख चुनें:</label>
+                    <label class="block font-bold text-gray-700 mb-1" id="lblDateTxt">कार्यक्रम की तारीख चुनें:</label>
                     <input type="date" id="bookDate" onchange="checkDate()" class="w-full border p-2.5 rounded-xl bg-gray-50 text-xs font-semibold" required>
                     <p id="availMsg" class="text-[11px] font-bold mt-1.5"></p>
                 </div>
 
-                <!-- DISCOUNT / COUPON SECTION -->
+                <!-- DISCOUNT COUPON -->
                 <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
-                    <label class="block font-bold text-amber-950 mb-1">
+                    <label class="block font-bold text-amber-950 mb-1" id="lblCouponBox">
                         <i class="fa-solid fa-tag text-amber-600 mr-1"></i> कूपन कोड / ऑफर लागू करें:
                     </label>
                     <div class="flex gap-2">
                         <input type="text" id="couponInput" placeholder="उदा. SHIV10" class="w-full border p-2 rounded-lg bg-white uppercase font-mono text-xs">
-                        <button type="button" onclick="applyCoupon()" class="bg-[#8E1634] text-amber-100 px-4 py-2 rounded-lg font-bold shrink-0">लागू करें</button>
+                        <button type="button" onclick="applyCoupon()" class="bg-[#8E1634] text-amber-100 px-4 py-2 rounded-lg font-bold shrink-0" id="btnApplyCoupon">लागू करें</button>
                     </div>
                     <p id="couponMsg" class="text-[10px] mt-1 font-bold"></p>
                 </div>
 
                 <!-- Advance Chips & QR -->
                 <div>
-                    <label class="block font-bold text-gray-700 mb-1">एडवांस टोकन राशि:</label>
+                    <label class="block font-bold text-gray-700 mb-1" id="lblAdvTxt">एडवांस टोकन राशि:</label>
                     <div class="grid grid-cols-4 gap-1.5 mb-2">
                         <button type="button" onclick="setAdv(200)" class="adv-btn py-1.5 rounded-lg border border-gray-200 bg-white font-bold">₹200</button>
                         <button type="button" onclick="setAdv(500)" class="adv-btn py-1.5 rounded-lg border border-[#8E1634] bg-rose-50 text-[#8E1634] font-bold">₹500</button>
@@ -288,7 +374,7 @@
                 </div>
 
                 <div class="p-2.5 bg-[#FAF6F0] rounded-xl flex justify-between items-center font-bold text-gray-800 border border-[#E7DAC7]">
-                    <span>बाकी देय (डिलीवरी पर):</span>
+                    <span id="lblDueTxt">बाकी देय (डिलीवरी पर):</span>
                     <span id="dueAmount" class="text-[#8E1634] text-sm font-extrabold">₹0</span>
                 </div>
 
@@ -297,14 +383,14 @@
                     <input type="tel" id="custPhone" placeholder="व्हाट्सएप मोबाइल नंबर" required class="w-full border p-2.5 rounded-xl text-xs">
                 </div>
 
-                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3.5 rounded-xl shadow mt-2 text-xs">
+                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3.5 rounded-xl shadow mt-2 text-xs" id="btnConfirmBook">
                     बुकिंग कन्फर्म करें व रसीद पाएं
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ================= MODAL 2: DIGITAL INVOICE / RECEIPT ================= -->
+    <!-- ================= DIGITAL INVOICE / RECEIPT ================= -->
     <div id="invoiceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-sm w-full p-5 max-h-[95vh] overflow-y-auto shadow-2xl text-xs">
             <div class="text-center border-b pb-3 mb-3">
@@ -352,7 +438,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL 3: ADD / EDIT PRODUCT WITH PHOTO REMOVE ================= -->
+    <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
     <div id="productModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 max-h-[92vh] overflow-y-auto shadow-2xl text-xs">
             <div class="flex justify-between items-center border-b pb-2 mb-3">
@@ -424,11 +510,31 @@
         <img id="zImg" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT APPLICATION CORE -->
     <script>
         let currentLang = "hi";
         let isOwnerAuthenticated = false;
         let pendingTargetTab = null;
+        let generatedOtp = null;
+
+        // Auto Translation Keyword Dictionary
+        const transDict = {
+            "शाही राजपूती लाल जरदोजी लहंगा": "Royal Rajputi Red Zardozi Lehenga",
+            "गोल्डन हेवी ब्राइडल कुंदन चोकर सेट": "Golden Heavy Bridal Kundan Choker Set",
+            "लहंगा": "Lehenga", "गाउन": "Gown", "चुनरी": "Dupatta", "ज्वेलरी": "Jewellery",
+            "सिल्क": "Pure Silk", "जरदोजी": "Zardozi Handwork", "कुंदन": "Real Kundan",
+            "ब्लाउज": "Blouse", "दुपट्टा": "Dupatta", "कैनकैन": "Can-can Layered",
+            "हैवी": "Heavy Designer", "गोल्डन": "Golden Polish", "ब्राइडल": "Bridal Wear"
+        };
+
+        function autoTranslateText(text) {
+            if (!text || currentLang === "hi") return text;
+            let res = text;
+            for (let [hi, en] of Object.entries(transDict)) {
+                res = res.replaceAll(hi, en);
+            }
+            return res;
+        }
 
         const defProfile = {
             shop: "शिवशक्ति लहंगा हाउस",
@@ -436,7 +542,17 @@
             phone: "919999999999",
             address: "मेन मार्केट, भारत",
             upi: "shivshakti@upi",
-            pin: "1234"
+            pin: "1234",
+            offer: {
+                active: true,
+                title: "शादी व पार्टी स्पेशल डिस्काउंट",
+                code: "SHIV10",
+                type: "percent",
+                val: 10,
+                min: 2500,
+                start: "2026-10-01",
+                end: "2026-12-31"
+            }
         };
 
         const defProducts = [
@@ -448,7 +564,7 @@
                 rentPrice: 3500,
                 salePrice: 28000,
                 security: 4000,
-                likes: 16,
+                likes: 18,
                 liked: false,
                 isSold: false,
                 images: [
@@ -465,7 +581,7 @@
                 rentPrice: 1200,
                 salePrice: 9500,
                 security: 2000,
-                likes: 9,
+                likes: 11,
                 liked: false,
                 isSold: false,
                 images: [
@@ -477,6 +593,7 @@
 
         let profile = JSON.parse(localStorage.getItem("ss_prof")) || defProfile;
         if (!profile.pin) profile.pin = "1234";
+        if (!profile.offer) profile.offer = defProfile.offer;
 
         let products = JSON.parse(localStorage.getItem("ss_prods")) || defProducts;
         let bookings = JSON.parse(localStorage.getItem("ss_books")) || [];
@@ -496,40 +613,39 @@
             localStorage.setItem("ss_books", JSON.stringify(bookings));
         }
 
-        // Language Switcher (Hindi / English)
+        // Language Switcher
         function toggleLang() {
             currentLang = currentLang === "hi" ? "en" : "hi";
             document.getElementById("langTxt").innerText = currentLang === "hi" ? "English" : "हिंदी";
             
-            if (currentLang === "en") {
-                document.getElementById("hdrSub").innerText = "ROYAL BRIDAL BOUTIQUE";
-                document.getElementById("offerBannerText").innerText = "Flat 10% OFF on bookings above ₹3000!";
-                document.getElementById("catAll").innerText = "All";
-                document.getElementById("catLeh").innerText = "👗 Lehenga";
-                document.getElementById("catGown").innerText = "💃 Gown";
-                document.getElementById("catChun").innerText = "🥻 Chunri";
-                document.getElementById("catJew").innerText = "👑 Jewellery";
-                document.getElementById("navLblCatalog").innerText = "Catalog";
-                document.getElementById("navLblInv").innerText = "Inventory 🔒";
-                document.getElementById("navLblKhata").innerText = "Khata 🔒";
-                document.getElementById("navLblProf").innerText = "Profile 🔒";
-            } else {
-                document.getElementById("hdrSub").innerText = "रॉयल ब्राइडल बुटीक";
-                document.getElementById("offerBannerText").innerText = "₹3000+ की बुकिंग पर 10% की सीधी छूट!";
-                document.getElementById("catAll").innerText = "सभी";
-                document.getElementById("catLeh").innerText = "👗 लहंगा";
-                document.getElementById("catGown").innerText = "💃 गाउन";
-                document.getElementById("catChun").innerText = "🥻 चुनरी";
-                document.getElementById("catJew").innerText = "👑 ज्वेलरी";
-                document.getElementById("navLblCatalog").innerText = "कैटलॉग";
-                document.getElementById("navLblInv").innerText = "सामान एडिट 🔒";
-                document.getElementById("navLblKhata").innerText = "खाता 🔒";
-                document.getElementById("navLblProf").innerText = "प्रोफाइल 🔒";
-            }
+            const isEn = currentLang === "en";
+            document.getElementById("hdrSub").innerText = isEn ? "ROYAL BRIDAL BOUTIQUE" : "रॉयल ब्राइडल बुटीक";
+            document.getElementById("catAll").innerText = isEn ? "All" : "सभी";
+            document.getElementById("catLeh").innerText = isEn ? "👗 Lehenga" : "👗 लहंगा";
+            document.getElementById("catGown").innerText = isEn ? "💃 Gown" : "💃 गाउन";
+            document.getElementById("catChun").innerText = isEn ? "🥻 Chunri" : "🥻 चुनरी";
+            document.getElementById("catJew").innerText = isEn ? "👑 Jewellery" : "👑 ज्वेलरी";
+            document.getElementById("navLblCatalog").innerText = isEn ? "Catalog" : "कैटलॉग";
+            document.getElementById("navLblInv").innerText = isEn ? "Inventory 🔒" : "सामान एडिट 🔒";
+            document.getElementById("navLblKhata").innerText = isEn ? "Khata 🔒" : "खाता 🔒";
+            document.getElementById("navLblProf").innerText = isEn ? "Profile 🔒" : "प्रोफाइल 🔒";
+            document.getElementById("lblCouponUse").innerText = isEn ? "Use Code:" : "कोड का उपयोग करें:";
+            document.getElementById("lblZoom").innerText = isEn ? "Zoom" : "ज़ूम करें";
+            document.getElementById("lblDescHead").innerText = isEn ? "Description:" : "विवरण (Description):";
+            document.getElementById("lblRentTxt").innerText = isEn ? "Rent Price" : "किराया मूल्य";
+            document.getElementById("lblSaleTxt").innerText = isEn ? "Sale Price" : "सेल मूल्य";
+            document.getElementById("lblSecTxt").innerText = isEn ? "Security Deposit (Refundable):" : "सिक्योरिटी डिपॉजिट (वापसी योग्य):";
+            document.getElementById("lblOptTxt").innerText = isEn ? "Options:" : "विकल्प:";
+            document.getElementById("lblDateTxt").innerText = isEn ? "Select Event Date:" : "कार्यक्रम की तारीख चुनें:";
+            document.getElementById("lblAdvTxt").innerText = isEn ? "Advance Token Deposit:" : "एडवांस टोकन राशि:";
+            document.getElementById("lblDueTxt").innerText = isEn ? "Due Balance on Delivery:" : "बाकी देय (डिलीवरी पर):";
+            document.getElementById("btnConfirmBook").innerText = isEn ? "Confirm Booking & Get Receipt" : "बुकिंग कन्फर्म करें व रसीद पाएं";
+            
+            updateOfferBannerUI();
             renderCatalog();
         }
 
-        // Security PIN Authentication Check
+        // OTP & PIN Forgot System
         function authAndSwitch(tabName) {
             if (isOwnerAuthenticated) {
                 switchTab(tabName);
@@ -537,6 +653,7 @@
                 pendingTargetTab = tabName;
                 document.getElementById("inputPin").value = "";
                 document.getElementById("pinError").classList.add("hidden");
+                cancelOtpReset();
                 openModal("pinModal");
             }
         }
@@ -552,6 +669,51 @@
             }
         }
 
+        function startOtpReset() {
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById("pinStandardView").classList.add("hidden");
+            document.getElementById("pinOtpView").classList.remove("hidden");
+            document.getElementById("otpNotice").innerText = `मालिक के मोबाइल (${profile.phone}) पर 4-अंकों का OTP भेजा जा रहा है।`;
+
+            // WhatsApp OTP trigger to owner's phone
+            const msg = `🔐 *शिवशक्ति लहंगा हाउस - सुरक्षा अलर्ट*\n\nआपका पिन रीसेट OTP है: *${generatedOtp}*\n(कृपया यह OTP किसी ग्राहक को न दें)`;
+            window.open(`https://api.whatsapp.com/send?phone=${profile.phone}&text=${encodeURIComponent(msg)}`, '_blank');
+            
+            // Backup testing alert
+            setTimeout(() => {
+                alert(`[सुरक्षा सूचना] मालिक के नंबर पर भेजा गया OTP: ${generatedOtp}`);
+            }, 800);
+        }
+
+        function cancelOtpReset() {
+            document.getElementById("pinStandardView").classList.remove("hidden");
+            document.getElementById("pinOtpView").classList.add("hidden");
+            document.getElementById("inputOtp").value = "";
+            document.getElementById("inputNewPin").value = "";
+        }
+
+        function verifyOtpAndSetPin() {
+            const enteredOtp = document.getElementById("inputOtp").value.trim();
+            const newPin = document.getElementById("inputNewPin").value.trim();
+
+            if (enteredOtp !== generatedOtp) {
+                alert("गलत OTP! कृपया सही OTP दर्ज करें।");
+                return;
+            }
+            if (newPin.length !== 4) {
+                alert("कृपया 4-अंकों का नया पिन दर्ज करें!");
+                return;
+            }
+
+            profile.pin = newPin;
+            save();
+            isOwnerAuthenticated = true;
+            closeModal("pinModal");
+            alert("बधाई! आपका नया सिक्योरिटी पिन सुरक्षित हो गया है।");
+            switchTab(pendingTargetTab);
+        }
+
+        // Profile & Offer Setup
         function initProfile() {
             document.getElementById("hdrShop").innerText = profile.shop;
             document.getElementById("profShop").value = profile.shop;
@@ -561,9 +723,43 @@
             document.getElementById("profUpi").value = profile.upi;
             document.getElementById("profPin").value = profile.pin;
 
+            // Offer values in profile
+            const o = profile.offer;
+            document.getElementById("offerActive").checked = o.active;
+            document.getElementById("offerTitle").value = o.title;
+            document.getElementById("offerCode").value = o.code;
+            document.getElementById("offerType").value = o.type;
+            document.getElementById("offerVal").value = o.val;
+            document.getElementById("offerMin").value = o.min;
+            document.getElementById("offerStart").value = o.start;
+            document.getElementById("offerEnd").value = o.end;
+
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${profile.upi}&pn=${profile.shop}&cu=INR`)}`;
             document.getElementById("profileQrImg").src = qrUrl;
             document.getElementById("checkoutQr").src = qrUrl;
+
+            updateOfferBannerUI();
+        }
+
+        function updateOfferBannerUI() {
+            const o = profile.offer;
+            const banner = document.getElementById("offerBannerBox");
+            if (!o || !o.active) {
+                banner.classList.add("hidden");
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            if (o.start && o.end && (today < o.start || today > o.end)) {
+                banner.classList.add("hidden");
+                return;
+            }
+
+            banner.classList.remove("hidden");
+            document.getElementById("offerTitleDisplay").innerText = o.title;
+            document.getElementById("offerCodeDisplay").innerText = o.code;
+            const discountTxt = o.type === "percent" ? `${o.val}% छूट` : `₹${o.val} छूट`;
+            document.getElementById("offerDatesDisplay").innerText = `न्यूनतम ₹${o.min} पर ${discountTxt} | वैधता: ${o.start} से ${o.end}`;
         }
 
         function saveProfile(e) {
@@ -574,12 +770,25 @@
             profile.address = document.getElementById("profAddress").value;
             profile.upi = document.getElementById("profUpi").value || "pay@upi";
             profile.pin = document.getElementById("profPin").value || "1234";
+
+            // Save custom offer
+            profile.offer = {
+                active: document.getElementById("offerActive").checked,
+                title: document.getElementById("offerTitle").value,
+                code: document.getElementById("offerCode").value.toUpperCase().trim(),
+                type: document.getElementById("offerType").value,
+                val: Number(document.getElementById("offerVal").value),
+                min: Number(document.getElementById("offerMin").value),
+                start: document.getElementById("offerStart").value,
+                end: document.getElementById("offerEnd").value
+            };
+
             save();
             initProfile();
-            alert("ओनर प्रोफाइल, नया पिन व QR सुरक्षित हो गया!");
+            alert("प्रोफाइल, कस्टम ऑफर व QR कोड सुरक्षित हो गए!");
         }
 
-        // Render Catalog
+        // Render Catalog with Auto-Translation
         function renderCatalog(cat = "All") {
             const grid = document.getElementById("catalogGrid");
             grid.innerHTML = "";
@@ -594,6 +803,10 @@
             }
 
             items.forEach(p => {
+                const title = autoTranslateText(p.title);
+                const desc = autoTranslateText(p.desc || '');
+                const category = autoTranslateText(p.category);
+
                 const card = document.createElement("div");
                 card.className = "bg-white rounded-2xl border border-[#EFE6D8] overflow-hidden shadow-sm";
                 card.innerHTML = `
@@ -608,15 +821,15 @@
                             </button>
                         </div>
                         ${p.isSold ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">SOLD OUT</span>' : ''}
-                        <span class="absolute bottom-3 left-3 bg-white/90 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">${p.category}</span>
+                        <span class="absolute bottom-3 left-3 bg-white/90 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">${category}</span>
                         <span class="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full"><i class="fa-solid fa-images"></i> ${p.images.length}</span>
                     </div>
                     <div class="p-4">
                         <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-gray-900 text-base cursor-pointer" onclick="openDetails(${p.id})">${p.title}</h3>
+                            <h3 class="font-bold text-gray-900 text-base cursor-pointer" onclick="openDetails(${p.id})">${title}</h3>
                             <span class="text-xs text-rose-600 font-bold shrink-0 ml-2">❤️ ${p.likes}</span>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.desc || ''}</p>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">${desc}</p>
                         <div class="grid grid-cols-2 gap-2 mt-3 pt-2 border-t text-xs">
                             <div><span class="text-gray-400 block text-[10px]">${currentLang === 'hi' ? 'किराया' : 'Rent'}</span><b class="text-[#8E1634] text-base">₹${p.rentPrice}</b></div>
                             <div class="text-right"><span class="text-gray-400 block text-[10px]">${currentLang === 'hi' ? 'सेल' : 'Sale'}</span><b class="text-emerald-700 text-base">₹${p.salePrice}</b></div>
@@ -651,7 +864,7 @@
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Booking & Details
+        // Details & Booking
         function openDetails(id) {
             selProd = products.find(x => x.id === id);
             photoIdx = 0;
@@ -659,14 +872,19 @@
             advAmt = 500;
             discountAmt = 0;
 
-            document.getElementById("mTitle").innerText = selProd.title;
-            document.getElementById("mCat").innerText = selProd.category;
-            document.getElementById("mDesc").innerText = selProd.desc || 'प्रीमियम डिज़ाइन';
+            document.getElementById("mTitle").innerText = autoTranslateText(selProd.title);
+            document.getElementById("mCat").innerText = autoTranslateText(selProd.category);
+            document.getElementById("mDesc").innerText = autoTranslateText(selProd.desc || 'प्रीमियम डिज़ाइन');
             document.getElementById("mRent").innerText = `₹${selProd.rentPrice}`;
             document.getElementById("mSale").innerText = `₹${selProd.salePrice}`;
             document.getElementById("mSecurity").innerText = `₹${selProd.security}`;
             document.getElementById("couponInput").value = "";
             document.getElementById("couponMsg").innerText = "";
+
+            // Show combo jewellery suggestion if product is a Lehenga
+            const combo = document.getElementById("comboSuggestionBox");
+            if (selProd.category === "लहंगा") combo.classList.remove("hidden");
+            else combo.classList.add("hidden");
             
             updateSlider();
             setType("Rent");
@@ -675,6 +893,13 @@
             document.getElementById("bookDate").value = "";
             document.getElementById("availMsg").innerText = "";
             openModal("bookingModal");
+        }
+
+        function applyComboOffer() {
+            discountAmt += 200;
+            document.getElementById("couponMsg").className = "text-[10px] mt-1 font-bold text-emerald-700";
+            document.getElementById("couponMsg").innerText = "🎉 मैचिंग ज्वेलरी कॉम्बो ऑफर लागू: -₹200 छूट!";
+            calcDue();
         }
 
         function updateSlider() {
@@ -706,28 +931,39 @@
             }
         }
 
-        // Apply Coupon Code
+        // Apply Custom Dynamic Coupon
         function applyCoupon() {
             const code = document.getElementById("couponInput").value.trim().toUpperCase();
             const msg = document.getElementById("couponMsg");
             const price = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+            const o = profile.offer;
 
-            if (code === "SHIV10") {
-                if (price >= 2000) {
-                    discountAmt = Math.round(price * 0.10);
+            if (o && o.active && code === o.code) {
+                const today = new Date().toISOString().split('T')[0];
+                if (o.start && o.end && (today < o.start || today > o.end)) {
+                    msg.className = "text-[10px] mt-1 font-bold text-red-600";
+                    msg.innerText = "माफ कीजिए, यह ऑफर समाप्त हो चुका है!";
+                    discountAmt = 0;
+                    calcDue();
+                    return;
+                }
+
+                if (price >= o.min) {
+                    discountAmt = o.type === "percent" ? Math.round(price * (o.val / 100)) : o.val;
                     msg.className = "text-[10px] mt-1 font-bold text-emerald-700";
-                    msg.innerText = `बधाई! 10% की छूट लागू हो गई: -₹${discountAmt}`;
+                    msg.innerText = `बधाई! ${o.title} लागू: -₹${discountAmt}`;
                 } else {
                     msg.className = "text-[10px] mt-1 font-bold text-red-600";
-                    msg.innerText = `यह कूपन ₹2000 से अधिक पर ही मान्य है।`;
+                    msg.innerText = `यह कूपन न्यूनतम ₹${o.min} की बुकिंग पर ही मान्य है।`;
+                    discountAmt = 0;
                 }
-            } else if (code === "FESTIVE300") {
-                discountAmt = 300;
+            } else if (code === "SHIV10" && price >= 2000) {
+                discountAmt = Math.round(price * 0.10);
                 msg.className = "text-[10px] mt-1 font-bold text-emerald-700";
-                msg.innerText = `बधाई! ₹300 की छूट लागू हो गई: -₹300`;
+                msg.innerText = `10% की छूट लागू: -₹${discountAmt}`;
             } else {
                 msg.className = "text-[10px] mt-1 font-bold text-red-600";
-                msg.innerText = `अमान्य कूपन कोड!`;
+                msg.innerText = "अमान्य कूपन कोड!";
                 discountAmt = 0;
             }
             calcDue();
@@ -793,7 +1029,7 @@
             window.open(`https://api.whatsapp.com/send?phone=${profile.phone}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Invoice Receipt
+        // Invoice
         function openInvoice(b) {
             document.getElementById("invShop").innerText = profile.shop;
             document.getElementById("invPhone").innerText = `संपर्क: ${profile.phone}`;
@@ -802,7 +1038,7 @@
             document.getElementById("invDate").innerText = b.createdAt;
             document.getElementById("invCust").innerText = b.customer;
             document.getElementById("invPhoneCust").innerText = b.phone;
-            document.getElementById("invItem").innerText = b.title;
+            document.getElementById("invItem").innerText = autoTranslateText(b.title);
             document.getElementById("invType").innerText = b.type;
             document.getElementById("invEvent").innerText = b.date;
             document.getElementById("invTotal").innerText = `₹${b.total}`;
@@ -819,7 +1055,7 @@
             window.open(`https://api.whatsapp.com/send?phone=91${lastBooking.phone}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Inventory
+        // Inventory Management
         function renderInventory() {
             const list = document.getElementById("inventoryList");
             list.innerHTML = "";
@@ -1061,10 +1297,10 @@
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // Start App
+        // Initialize App
         initProfile();
         renderCatalog();
     </script>
 </body>
-    </html>
+</html>
 
