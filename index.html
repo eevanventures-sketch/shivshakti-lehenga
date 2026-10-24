@@ -2,43 +2,42 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>शिवशक्ति लहंगा हाउस | Shiv Shakti Lehenga House</title>
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#FAF6F0">
     
-    <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Rozha+One&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF6F0; color: #2D2424; }
         .royal-title { font-family: 'Rozha One', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .luxury-card { background: #FFFFFF; border: 1px solid #EFE6D8; box-shadow: 0 4px 20px -2px rgba(184, 134, 11, 0.08); }
+        @media print {
+            body * { visibility: hidden; }
+            #invoiceModal, #invoiceModal * { visibility: visible; }
+            #invoiceModal { position: absolute; left: 0; top: 0; width: 100%; background: white; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="pb-28 antialiased">
 
-    <!-- Top Luxury Light Header -->
+    <!-- Header -->
     <header class="bg-[#FAF6F0]/95 backdrop-blur-md sticky top-0 z-40 border-b border-[#E7DAC7] shadow-sm">
         <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
             <div>
                 <span class="text-[9px] tracking-widest uppercase text-amber-700 font-bold flex items-center gap-1">
-                    <i class="fa-solid fa-crown text-amber-600"></i> रॉयल ब्राइडल कलेक्शन
+                    <i class="fa-solid fa-crown text-amber-600"></i> रॉयल ब्राइडल बुटीक
                 </span>
-                <h1 class="text-2xl font-extrabold tracking-tight text-[#5B1024] royal-title leading-tight">
+                <h1 id="hdrShop" class="text-2xl font-extrabold text-[#5B1024] royal-title leading-tight">
                     शिवशक्ति लहंगा हाउस
                 </h1>
             </div>
-
-            <!-- Language Switcher -->
-            <button onclick="toggleLang()" class="bg-white border border-[#D9C4A9] text-[#5B1024] text-xs px-3 py-1.5 rounded-full font-bold shadow-sm active:scale-95 transition">
-                <i class="fa-solid fa-language text-amber-600 mr-1"></i><span id="langTxt">English</span>
+            <button onclick="switchTab('profile')" class="w-10 h-10 rounded-full bg-white border border-[#D9C4A9] text-[#5B1024] flex items-center justify-center shadow-sm" title="प्रोफाइल & QR">
+                <i class="fa-solid fa-user-tie text-base text-amber-700"></i>
             </button>
         </div>
     </header>
@@ -46,184 +45,268 @@
     <!-- Main Container -->
     <main class="max-w-md mx-auto px-4 pt-3">
 
-        <!-- ================= CUSTOMER VIEW ================= -->
-        <div id="customerTab">
-            <!-- Subtle Royal Banner -->
-            <div class="rounded-2xl bg-gradient-to-r from-[#FFF4EA] to-[#FBEAD2] p-4 border border-[#E8D1B5] mb-4 relative overflow-hidden shadow-sm">
-                <div class="relative z-10">
-                    <span class="bg-[#8E1634] text-amber-100 text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">शुभ विवाह विशेष</span>
-                    <h2 class="text-lg font-bold text-[#5B1024] mt-1.5 royal-title" id="bannerHeading">प्रीमियम लहंगा, गाउन व ज्वेलरी</h2>
-                    <p class="text-xs text-amber-950/80 mt-0.5" id="bannerSub">तारीख चुनें, ऑनलाइन बुक करें अथवा किराए पर लें</p>
-                </div>
+        <!-- 1. CATALOG TAB -->
+        <div id="tabCatalog">
+            <div class="mb-3">
+                <input type="text" id="searchInput" oninput="renderCatalog()" placeholder="🔍 लहंगा, गाउन या ज्वेलरी खोजें..." class="w-full px-4 py-2.5 bg-white border border-[#E7DAC7] rounded-xl text-xs shadow-sm focus:outline-none">
             </div>
 
-            <!-- Categories -->
+            <!-- Category Pills -->
             <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs font-semibold">
-                <button onclick="filterCat('All')" class="cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shadow-sm border border-[#8E1634] shrink-0" data-cat="All">सभी</button>
-                <button onclick="filterCat('लहंगा')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shadow-sm shrink-0" data-cat="लहंगा">👗 लहंगा</button>
-                <button onclick="filterCat('गाउन')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shadow-sm shrink-0" data-cat="गाउन">💃 गाउन</button>
-                <button onclick="filterCat('चुनरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shadow-sm shrink-0" data-cat="चुनरी">🥻 चुनरी / दुपट्टा</button>
-                <button onclick="filterCat('ज्वेलरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shadow-sm shrink-0" data-cat="ज्वेलरी">👑 ज्वेलरी</button>
+                <button onclick="filterCat('All')" class="cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shrink-0" data-cat="All">सभी</button>
+                <button onclick="filterCat('लहंगा')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="लहंगा">👗 लहंगा</button>
+                <button onclick="filterCat('गाउन')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="गाउन">💃 गाउन</button>
+                <button onclick="filterCat('चुनरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="चुनरी">🥻 चुनरी</button>
+                <button onclick="filterCat('ज्वेलरी')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0" data-cat="ज्वेलरी">👑 ज्वेलरी</button>
             </div>
 
-            <!-- Product Feed -->
-            <div id="productGrid" class="space-y-4 mt-3"></div>
+            <div id="catalogGrid" class="space-y-4 mt-3"></div>
         </div>
 
-        <!-- ================= KHATA / ADMIN VIEW ================= -->
-        <div id="adminTab" class="hidden">
+        <!-- 2. INVENTORY TAB (EDIT / REMOVE / SOLD) -->
+        <div id="tabInventory" class="hidden">
             <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4 flex justify-between items-center">
                 <div>
-                    <h3 class="font-bold text-base text-[#5B1024] royal-title"><i class="fa-solid fa-receipt text-amber-600 mr-1"></i> दुकान का डिजिटल खाता</h3>
-                    <p class="text-[11px] text-gray-500">बुकिंग, एडवांस व ऑटो रिमाइंडर</p>
+                    <h3 class="font-bold text-base text-[#5B1024] royal-title">सामान प्रबंधन</h3>
+                    <p class="text-[11px] text-gray-500">एडिट करें, फोटो हटाएं या सोल्ड करें</p>
                 </div>
-                <button onclick="openModal('uploadModal')" class="bg-[#8E1634] text-amber-100 text-xs px-3.5 py-2 rounded-xl font-bold shadow active:scale-95 transition">
-                    <i class="fa-solid fa-plus-circle"></i> नया सामान
+                <button onclick="openProductModal()" class="bg-[#8E1634] text-amber-100 text-xs px-3.5 py-2 rounded-xl font-bold shadow">
+                    + नया सामान
                 </button>
             </div>
+            <div id="inventoryList" class="space-y-3"></div>
+        </div>
 
+        <!-- 3. KHATA / ORDERS TAB -->
+        <div id="tabKhata" class="hidden">
+            <div class="bg-white border border-[#E7DAC7] p-4 rounded-2xl shadow-sm mb-4">
+                <h3 class="font-bold text-base text-[#5B1024] royal-title"><i class="fa-solid fa-receipt text-amber-600 mr-1"></i> डिजिटल खाता</h3>
+                <p class="text-[11px] text-gray-500">बुकिंग रसीद, बाकी पेमेंट और WhatsApp/SMS रिमाइंडर</p>
+            </div>
             <div id="ledgerList" class="space-y-3"></div>
+        </div>
+
+        <!-- 4. PROFILE & QR TAB -->
+        <div id="tabProfile" class="hidden">
+            <div class="bg-white border border-[#E7DAC7] p-5 rounded-2xl shadow-sm space-y-4">
+                <h3 class="font-bold text-base text-gray-900 royal-title border-b pb-2">ओनर प्रोफाइल एवं पेमेंट QR सेटिंग्स</h3>
+                <form onsubmit="saveProfile(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">दुकान का नाम:</label>
+                        <input type="text" id="profShop" required class="w-full border p-2.5 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">मालिक का नाम व मोबाइल (WhatsApp):</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="profOwner" required placeholder="मालिक का नाम" class="border p-2.5 rounded-xl">
+                            <input type="tel" id="profPhone" required placeholder="मोबाइल नंबर" class="border p-2.5 rounded-xl">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">दुकान का पता:</label>
+                        <textarea id="profAddress" rows="2" class="w-full border p-2.5 rounded-xl"></textarea>
+                    </div>
+                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                        <label class="block font-bold text-amber-900 mb-1">
+                            <i class="fa-solid fa-qrcode mr-1"></i> आपकी UPI ID (QR बारकोड के लिए):
+                        </label>
+                        <input type="text" id="profUpi" placeholder="उदा. 9893XXXXXX@upi या yourname@okhdfcbank" class="w-full border p-2.5 rounded-xl bg-white font-mono">
+                        <p class="text-[10px] text-amber-800 mt-1">ग्राहक एडवांस जमा करते समय इसी UPI ID का QR स्कैन करेगा।</p>
+                    </div>
+                    <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3 rounded-xl shadow">
+                        प्रोफाइल व QR सुरक्षित करें
+                    </button>
+                </form>
+
+                <div class="pt-3 border-t text-center">
+                    <span class="text-xs font-bold text-gray-600 block mb-2">आपका लाइव पेमेंट QR कोड:</span>
+                    <img id="profileQrImg" src="" class="w-36 h-36 mx-auto border p-1 rounded-xl shadow-sm bg-white" alt="UPI QR">
+                    <span class="text-[10px] text-gray-400 mt-1 block">PhonePe, Google Pay, Paytm समर्थित</span>
+                </div>
+            </div>
         </div>
 
     </main>
 
     <!-- Bottom App Navigation Bar -->
     <nav class="fixed bottom-0 left-0 right-0 bg-[#FAF6F0]/95 backdrop-blur-md border-t border-[#E7DAC7] z-40 py-2">
-        <div class="max-w-md mx-auto px-6 flex justify-around items-center">
-            <button onclick="switchTab('customer')" id="btnNavShop" class="flex flex-col items-center text-[#8E1634] font-bold">
-                <i class="fa-solid fa-store text-lg"></i>
-                <span class="text-[10px] mt-1" id="navHome">कैटलॉग</span>
+        <div class="max-w-md mx-auto px-4 flex justify-between items-center text-xs">
+            <button onclick="switchTab('catalog')" id="navCatalog" class="flex flex-col items-center text-[#8E1634] font-bold">
+                <i class="fa-solid fa-store text-lg"></i><span class="text-[10px] mt-0.5">कैटलॉग</span>
             </button>
-            <button onclick="switchTab('admin')" id="btnNavKhata" class="flex flex-col items-center text-gray-400 font-medium">
-                <i class="fa-solid fa-book-bookmark text-lg"></i>
-                <span class="text-[10px] mt-1" id="navLedger">डिजिटल खाता</span>
+            <button onclick="switchTab('inventory')" id="navInventory" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-[10px] mt-0.5">सामान एडिट</span>
             </button>
-            <button onclick="contactStoreWhatsApp()" class="flex flex-col items-center text-emerald-600 font-medium">
-                <i class="fa-brands fa-whatsapp text-xl"></i>
-                <span class="text-[10px] mt-0.5">व्हाट्सएप</span>
+            <button onclick="switchTab('khata')" id="navKhata" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-receipt text-lg"></i><span class="text-[10px] mt-0.5">खाता</span>
+            </button>
+            <button onclick="switchTab('profile')" id="navProfile" class="flex flex-col items-center text-gray-400 font-medium">
+                <i class="fa-solid fa-gear text-lg"></i><span class="text-[10px] mt-0.5">प्रोफाइल & QR</span>
             </button>
         </div>
     </nav>
 
-    <!-- Footer Security & Make In India Branding -->
+    <!-- Footer Branding -->
     <footer class="mt-8 mb-20 text-center px-4 text-gray-500 text-[11px]">
         <div class="flex items-center justify-center gap-3 text-xs mb-1 text-gray-600 font-semibold">
-            <span>🇮🇳 Make in India</span>
-            <span>•</span>
-            <span><i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% Secured System</span>
+            <span>🇮🇳 Make in India</span><span>•</span><span><i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% Secured</span>
         </div>
         <p class="font-bold text-gray-700">Powered by Eevan Ventures</p>
     </footer>
 
-    <!-- ================= PRODUCT DETAIL & BOOKING MODAL ================= -->
+    <!-- ================= MODAL 1: PRODUCT DETAILS & ADVANCE CHECKOUT ================= -->
     <div id="bookingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full max-h-[92vh] overflow-y-auto p-5 pb-8 shadow-2xl">
-            
-            <div class="flex justify-between items-start border-b border-gray-100 pb-2">
+            <div class="flex justify-between items-start border-b pb-2">
                 <div>
-                    <span id="modalCat" class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
-                    <h3 id="modalTitle" class="text-lg font-bold text-gray-900 mt-1 royal-title"></h3>
+                    <span id="mCat" class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
+                    <h3 id="mTitle" class="text-lg font-bold text-gray-900 mt-1 royal-title"></h3>
                 </div>
                 <button onclick="closeModal('bookingModal')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-sm">&times;</button>
             </div>
 
-            <!-- Multi Photo Slider with Zoom Support -->
-            <div class="relative mt-3 rounded-2xl overflow-hidden bg-gray-100 aspect-[4/3] group border border-gray-200">
-                <img id="sliderImg" src="" onclick="openZoomImage()" class="w-full h-full object-cover transition duration-300 cursor-zoom-in" alt="Dress">
-                
-                <button onclick="prevPhoto()" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-gray-800 flex items-center justify-center text-xs shadow-md">❮</button>
-                <button onclick="nextPhoto()" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-gray-800 flex items-center justify-center text-xs shadow-md">❯</button>
-                
-                <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded-full" id="photoCounter">1/1</div>
+            <!-- Photo Slider with Zoom -->
+            <div class="relative mt-3 rounded-2xl overflow-hidden bg-gray-100 aspect-[4/3] border border-gray-200">
+                <img id="mImg" src="" onclick="openZoom()" class="w-full h-full object-cover cursor-zoom-in" alt="Dress">
+                <button onclick="prevPhoto()" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-gray-800 flex items-center justify-center text-xs shadow">❮</button>
+                <button onclick="nextPhoto()" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 text-gray-800 flex items-center justify-center text-xs shadow">❯</button>
+                <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded-full" id="mCounter">1/1</div>
                 <div class="absolute bottom-2 left-2 bg-white/90 text-gray-700 text-[10px] px-2 py-0.5 rounded-full shadow font-semibold">
-                    <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>टच करके ज़ूम करें
+                    <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>ज़ूम करें
                 </div>
             </div>
 
-            <!-- Description -->
             <div class="mt-3 p-3 bg-[#FAF6F0] rounded-xl border border-[#E7DAC7] text-xs">
-                <h4 class="font-bold text-[#5B1024] mb-1">विवरण (Product Details):</h4>
-                <p id="modalDesc" class="text-gray-700 leading-relaxed"></p>
+                <h4 class="font-bold text-[#5B1024] mb-1">विवरण (Description):</h4>
+                <p id="mDesc" class="text-gray-700 leading-relaxed"></p>
             </div>
 
-            <!-- Price Breakdown -->
             <div class="grid grid-cols-2 gap-2 my-3 p-3 bg-white rounded-xl border border-gray-200 text-xs shadow-sm">
-                <div>
-                    <span class="text-gray-400 block font-semibold text-[10px] uppercase">किराया मूल्य</span>
-                    <b class="text-[#8E1634] text-base" id="modalRent"></b>
-                </div>
-                <div>
-                    <span class="text-gray-400 block font-semibold text-[10px] uppercase">सेल मूल्य</span>
-                    <b class="text-emerald-700 text-base" id="modalSale"></b>
-                </div>
-                <div class="col-span-2 pt-2 border-t border-gray-100 flex justify-between items-center text-gray-600">
-                    <span>सिक्योरिटी डिपॉजिट (वापसी योग्य):</span>
-                    <b class="text-gray-900" id="modalSecurity"></b>
+                <div><span class="text-gray-400 block font-semibold text-[10px]">किराया मूल्य</span><b class="text-[#8E1634] text-base" id="mRent"></b></div>
+                <div><span class="text-gray-400 block font-semibold text-[10px]">सेल मूल्य</span><b class="text-emerald-700 text-base" id="mSale"></b></div>
+                <div class="col-span-2 pt-2 border-t flex justify-between items-center text-gray-600">
+                    <span>सिक्योरिटी डिपॉजिट (वापसी योग्य):</span><b class="text-gray-900" id="mSecurity"></b>
                 </div>
             </div>
 
-            <!-- Booking Form -->
-            <form onsubmit="handleBookingSubmit(event)" class="space-y-3 text-xs">
+            <form onsubmit="handleBooking(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-gray-700 mb-1">विकल्प चुनें:</label>
+                    <label class="block font-bold text-gray-700 mb-1">विकल्प:</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <button type="button" onclick="setBookingType('Rent')" id="btnTypeRent" class="py-2.5 rounded-xl border-2 font-bold border-[#8E1634] bg-rose-50 text-[#8E1634]">किराए पर लें</button>
-                        <button type="button" onclick="setBookingType('Buy')" id="btnTypeBuy" class="py-2.5 rounded-xl border-2 font-bold border-gray-200 text-gray-600">नया खरीदें</button>
+                        <button type="button" onclick="setType('Rent')" id="btnRent" class="py-2 rounded-xl border-2 font-bold border-[#8E1634] bg-rose-50 text-[#8E1634]">किराए पर लें</button>
+                        <button type="button" onclick="setType('Buy')" id="btnBuy" class="py-2 rounded-xl border-2 font-bold border-gray-200 text-gray-600">नया खरीदें</button>
                     </div>
                 </div>
 
                 <div id="dateBox">
                     <label class="block font-bold text-gray-700 mb-1">कार्यक्रम की तारीख चुनें:</label>
-                    <input type="date" id="selectedDate" onchange="checkAvailabilityLive()" class="w-full border border-gray-300 rounded-xl p-2.5 bg-gray-50 text-xs font-semibold focus:outline-none" required>
-                    <p id="availMessage" class="text-[11px] font-bold mt-1.5"></p>
+                    <input type="date" id="bookDate" onchange="checkDate()" class="w-full border p-2.5 rounded-xl bg-gray-50 text-xs font-semibold" required>
+                    <p id="availMsg" class="text-[11px] font-bold mt-1.5"></p>
                 </div>
 
-                <!-- Advance Options -->
+                <!-- Advance Chips & QR -->
                 <div>
-                    <label class="block font-bold text-gray-700 mb-1">एडवांस टोकन जमा करें (तारीख बुक करने हेतु):</label>
+                    <label class="block font-bold text-gray-700 mb-1">एडवांस टोकन राशि:</label>
                     <div class="grid grid-cols-4 gap-1.5 mb-2">
-                        <button type="button" onclick="setAdvance(200)" class="adv-chip py-2 rounded-lg border border-gray-200 bg-white font-bold text-gray-700">₹200</button>
-                        <button type="button" onclick="setAdvance(500)" class="adv-chip py-2 rounded-lg border border-[#8E1634] bg-rose-50 font-bold text-[#8E1634]">₹500</button>
-                        <button type="button" onclick="setAdvance(1000)" class="adv-chip py-2 rounded-lg border border-gray-200 bg-white font-bold text-gray-700">₹1000</button>
-                        <button type="button" onclick="setAdvance(2000)" class="adv-chip py-2 rounded-lg border border-gray-200 bg-white font-bold text-gray-700">₹2000</button>
+                        <button type="button" onclick="setAdv(200)" class="adv-btn py-1.5 rounded-lg border border-gray-200 bg-white font-bold">₹200</button>
+                        <button type="button" onclick="setAdv(500)" class="adv-btn py-1.5 rounded-lg border border-[#8E1634] bg-rose-50 text-[#8E1634] font-bold">₹500</button>
+                        <button type="button" onclick="setAdv(1000)" class="adv-btn py-1.5 rounded-lg border border-gray-200 bg-white font-bold">₹1000</button>
+                        <button type="button" onclick="setAdv(2000)" class="adv-btn py-1.5 rounded-lg border border-gray-200 bg-white font-bold">₹2000</button>
                     </div>
-                    <input type="number" id="customAdvance" placeholder="या अन्य राशि डालें (₹)" oninput="updateCalculation()" class="w-full border border-gray-300 rounded-xl p-2.5 text-xs">
+                    <input type="number" id="customAdv" placeholder="या अन्य राशि डालें (₹)" oninput="calcDue()" class="w-full border p-2.5 rounded-xl text-xs">
+                </div>
+
+                <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-center">
+                    <span class="text-[11px] font-bold text-amber-950 block mb-1">
+                        <i class="fa-solid fa-qrcode mr-1"></i> एडवांस टोकन स्कैन करके भरें:
+                    </span>
+                    <img id="checkoutQr" src="" class="w-28 h-28 mx-auto border p-1 rounded-xl bg-white shadow-sm" alt="QR">
+                    <span class="text-[10px] text-gray-500 block mt-1">पेमेंट होने पर नीचे नाम व नंबर डालकर बुक करें</span>
                 </div>
 
                 <div class="p-2.5 bg-[#FAF6F0] rounded-xl flex justify-between items-center font-bold text-gray-800 border border-[#E7DAC7]">
-                    <span>बाकी देय (डिलीवरी के समय):</span>
+                    <span>बाकी देय (डिलीवरी पर):</span>
                     <span id="dueAmount" class="text-[#8E1634] text-sm font-extrabold">₹0</span>
                 </div>
 
                 <div class="space-y-2 pt-1">
-                    <input type="text" id="custName" placeholder="आपका नाम (Customer Name)" required class="w-full border border-gray-300 rounded-xl p-2.5 text-xs">
-                    <input type="tel" id="custPhone" placeholder="मोबाइल नंबर (WhatsApp Phone Number)" required class="w-full border border-gray-300 rounded-xl p-2.5 text-xs">
+                    <input type="text" id="custName" placeholder="ग्राहक का पूरा नाम" required class="w-full border p-2.5 rounded-xl text-xs">
+                    <input type="tel" id="custPhone" placeholder="व्हाट्सएप मोबाइल नंबर" required class="w-full border p-2.5 rounded-xl text-xs">
                 </div>
 
-                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3.5 rounded-xl shadow-lg mt-2 active:scale-95 transition text-xs flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-calendar-check"></i> बुकिंग करें और मालिक को सूचित करें
+                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3.5 rounded-xl shadow mt-2 text-xs">
+                    बुकिंग कन्फर्म करें व रसीद पाएं
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ================= ADD NEW PRODUCT (WITH PROPER FILE COMPRESSION) ================= -->
-    <div id="uploadModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-5 max-h-[92vh] overflow-y-auto shadow-2xl">
-            <div class="flex justify-between items-center border-b pb-2 mb-3">
-                <h3 class="font-bold text-base text-[#5B1024] royal-title">नया प्रोडक्ट जोड़ें</h3>
-                <button onclick="closeModal('uploadModal')" class="text-gray-400 hover:text-black text-xl">&times;</button>
+    <!-- ================= MODAL 2: DIGITAL INVOICE / RECEIPT ================= -->
+    <div id="invoiceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 max-h-[95vh] overflow-y-auto shadow-2xl text-xs">
+            <div class="text-center border-b pb-3 mb-3">
+                <span class="text-[9px] uppercase tracking-widest text-amber-700 font-bold block">आधिकारिक बुकिंग रसीद</span>
+                <h2 class="text-xl font-bold text-[#5B1024] royal-title" id="invShop"></h2>
+                <p class="text-[10px] text-gray-500" id="invPhone"></p>
+                <p class="text-[10px] text-gray-500" id="invAddr"></p>
             </div>
 
-            <form onsubmit="handleProductUpload(event)" class="space-y-3 text-xs">
+            <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg mb-3">
+                <div>रसीद सं: <b id="invId"></b></div>
+                <div>दिनांक: <span id="invDate"></span></div>
+            </div>
+
+            <div class="space-y-1 border-b pb-2 mb-2">
+                <div>ग्राहक: <b id="invCust" class="text-gray-900"></b></div>
+                <div>मोबाइल: <span id="invPhoneCust"></span></div>
+                <div>सामान: <b id="invItem" class="text-[#8E1634]"></b></div>
+                <div>प्रकार: <span id="invType" class="font-bold"></span> | तिथि: <b id="invEvent"></b></div>
+            </div>
+
+            <div class="space-y-1.5 py-1">
+                <div class="flex justify-between"><span>कुल तय राशि:</span><b id="invTotal"></b></div>
+                <div class="flex justify-between text-emerald-700"><span>जमा टोकन एडवांस:</span><b id="invAdv"></b></div>
+                <div class="flex justify-between text-rose-700 font-bold text-sm pt-1 border-t"><span>बाकी बकाया:</span><span id="invDue"></span></div>
+                <div class="flex justify-between text-gray-500 text-[10px]"><span>सिक्योरिटी (वापसी योग्य):</span><span id="invSec"></span></div>
+            </div>
+
+            <div class="bg-amber-50 p-2 rounded text-[9px] text-amber-900 mt-3 border border-amber-200">
+                ⚠️ *नियम:* लहंगा वापसी पर सिक्योरिटी राशि तुरंत वापस कर दी जाएगी।
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mt-4 no-print">
+                <button onclick="window.print()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-print"></i> प्रिंट / PDF
+                </button>
+                <button onclick="shareInvoice()" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-1">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp रसीद
+                </button>
+                <button onclick="closeModal('invoiceModal')" class="col-span-2 bg-[#8E1634] text-white py-2 rounded-xl font-semibold mt-1">
+                    बंद करें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL 3: ADD / EDIT PRODUCT WITH PHOTO REMOVE ================= -->
+    <div id="productModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 max-h-[92vh] overflow-y-auto shadow-2xl text-xs">
+            <div class="flex justify-between items-center border-b pb-2 mb-3">
+                <h3 class="font-bold text-base text-[#5B1024] royal-title" id="pModalTitle">नया प्रोडक्ट जोड़ें</h3>
+                <button onclick="closeModal('productModal')" class="text-gray-400 hover:text-black text-xl">&times;</button>
+            </div>
+
+            <form onsubmit="saveProduct(event)" class="space-y-3">
+                <input type="hidden" id="editId">
+
                 <div>
                     <label class="block font-bold mb-1">प्रोडक्ट का नाम:</label>
-                    <input type="text" id="newTitle" placeholder="उदा. रजवाड़ी हेवी ब्राइडल लहंगा" required class="w-full border p-2.5 rounded-xl">
+                    <input type="text" id="pTitle" required placeholder="उदा. रजवाड़ी लाल ब्राइडल लहंगा" class="w-full border p-2.5 rounded-xl">
                 </div>
 
                 <div>
                     <label class="block font-bold mb-1">कैटेगरी:</label>
-                    <select id="newCat" class="w-full border p-2.5 rounded-xl bg-white">
+                    <select id="pCat" class="w-full border p-2.5 rounded-xl bg-white">
                         <option value="लहंगा">लहंगा (Lehenga)</option>
                         <option value="गाउन">गाउन (Gown)</option>
                         <option value="चुनरी">चुनरी / दुपट्टा (Chunri)</option>
@@ -232,65 +315,75 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold mb-1">विवरण (कपड़े का फैब्रिक, वर्क आदि):</label>
-                    <textarea id="newDesc" rows="2" placeholder="उदा. पूरे लहंगे में जरदोजी और हाथ की कढ़ाई का काम, डबल दुपट्टा, कैनकैन लगा हुआ।" class="w-full border p-2.5 rounded-xl"></textarea>
+                    <label class="block font-bold mb-1">विवरण (Fabric & Work):</label>
+                    <textarea id="pDesc" rows="2" placeholder="फैब्रिक, वर्क, साइज आदि..." class="w-full border p-2.5 rounded-xl"></textarea>
                 </div>
 
-                <!-- Gallery 5-10 Photo Selection -->
+                <!-- Existing Photos (With Red X button to delete wrong photo) -->
+                <div>
+                    <label class="block font-bold mb-1 text-gray-700">वर्तमान फ़ोटो (हटाने के लिए ❌ दबाएँ):</label>
+                    <div id="curPhotos" class="flex gap-2 overflow-x-auto py-1 hide-scrollbar min-h-[50px]"></div>
+                </div>
+
+                <!-- Add New Photos -->
                 <div>
                     <label class="block font-bold mb-1 text-[#8E1634]">
-                        <i class="fa-solid fa-camera mr-1"></i> फोन गैलरी से 2 से 10 फोटो चुनें:
+                        <i class="fa-solid fa-camera mr-1"></i> गैलरी से 2 से 10 नई फ़ोटो चुनें:
                     </label>
-                    <input type="file" id="filePicker" multiple accept="image/*" onchange="processSelectedImages(event)" class="w-full border-2 border-dashed border-amber-300 p-3 rounded-xl bg-amber-50/40 text-xs cursor-pointer">
-                    <p class="text-[10px] text-gray-500 mt-1">आप आगे, पीछे और दुपट्टे की 5-10 फ़ोटो एक साथ सेलेक्ट कर सकते हैं।</p>
-                    
-                    <div id="uploadPreview" class="flex gap-2 overflow-x-auto py-2 hide-scrollbar"></div>
+                    <input type="file" id="pFiles" multiple accept="image/*" onchange="processFiles(event)" class="w-full border-2 border-dashed border-amber-300 p-2.5 rounded-xl bg-amber-50/40 text-xs cursor-pointer">
+                    <div id="newPreview" class="flex gap-2 overflow-x-auto py-1 hide-scrollbar"></div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block font-bold mb-1">किराया रेट (₹):</label>
-                        <input type="number" id="newRent" placeholder="उदा. 3500" required class="w-full border p-2.5 rounded-xl">
+                        <input type="number" id="pRent" required class="w-full border p-2.5 rounded-xl">
                     </div>
                     <div>
                         <label class="block font-bold mb-1">सेल रेट (₹):</label>
-                        <input type="number" id="newSale" placeholder="उदा. 25000" required class="w-full border p-2.5 rounded-xl">
+                        <input type="number" id="pSale" required class="w-full border p-2.5 rounded-xl">
                     </div>
                 </div>
 
                 <div>
                     <label class="block font-bold mb-1">सिक्योरिटी डिपॉजिट (₹):</label>
-                    <input type="number" id="newSec" placeholder="उदा. 3000" required class="w-full border p-2.5 rounded-xl">
+                    <input type="number" id="pSec" required class="w-full border p-2.5 rounded-xl">
                 </div>
 
-                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3 rounded-xl shadow-lg mt-2 text-sm">
-                    प्रोडक्ट ऐप में सेव करें
+                <button type="submit" class="w-full bg-[#8E1634] text-amber-100 font-bold py-3 rounded-xl shadow mt-2 text-sm">
+                    सुरक्षित करें
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ================= FULLSCREEN ZOOM MODAL ================= -->
+    <!-- Zoom Modal -->
     <div id="zoomModal" class="fixed inset-0 bg-black/95 hidden z-50 flex items-center justify-center p-2" onclick="closeModal('zoomModal')">
-        <img id="zoomedImg" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
-        <button class="absolute top-4 right-4 text-white text-2xl font-bold">&times;</button>
+        <img id="zImg" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const OWNER_PHONE = "919999999999"; // यहाँ अपना 10 अंकों का व्हाट्सएप नंबर कंट्री कोड सहित डालें
+        const defProfile = {
+            shop: "शिवशक्ति लहंगा हाउस",
+            owner: "शिवशक्ति प्रोप्राइटर",
+            phone: "919999999999",
+            address: "मेन मार्केट, भारत",
+            upi: "shivshakti@upi"
+        };
 
-        let currentLang = "hi";
-        const initialProducts = [
+        const defProducts = [
             {
                 id: 101,
                 title: "शाही राजपूती लाल जरदोजी लहंगा",
                 category: "लहंगा",
-                desc: "हैवी सिल्क फैब्रिक, जरदोजी व कटदाना हैंडवर्क। साथ में मैचिंग ब्लाउज, डबल दुपट्टा और ट्रिपल लेयर कैनकैन।",
+                desc: "हैवी सिल्क फैब्रिक, जरदोजी व कटदाना हैंडवर्क। साथ में मैचिंग ब्लाउज व डबल दुपट्टा।",
                 rentPrice: 3500,
                 salePrice: 28000,
                 security: 4000,
-                likes: 12,
+                likes: 16,
+                liked: false,
+                isSold: false,
                 images: [
                     "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=700&auto=format&fit=crop&q=80",
                     "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=700&auto=format&fit=crop&q=80"
@@ -301,11 +394,13 @@
                 id: 102,
                 title: "गोल्डन हेवी ब्राइडल कुंदन चोकर सेट",
                 category: "ज्वेलरी",
-                desc: "24 कैरेट गोल्ड पॉलिश, ओरिजिनल कुंदन, मांगटीका, नथ व झुमके सहित पूरा ब्राइडल सेट।",
+                desc: "24 कैरेट गोल्ड पॉलिश, ओरिजिनल कुंदन, मांगटीका व झुमके सहित पूरा सेट।",
                 rentPrice: 1200,
                 salePrice: 9500,
                 security: 2000,
-                likes: 8,
+                likes: 9,
+                liked: false,
+                isSold: false,
                 images: [
                     "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=700&auto=format&fit=crop&q=80"
                 ],
@@ -313,420 +408,505 @@
             }
         ];
 
-        let products = JSON.parse(localStorage.getItem("ss_pro_products")) || initialProducts;
-        let bookings = JSON.parse(localStorage.getItem("ss_pro_bookings")) || [];
-        let selectedProduct = null;
-        let activePhotoIndex = 0;
-        let currentBookingType = "Rent";
-        let chosenAdvance = 500;
-        let compressedImages = [];
+        let profile = JSON.parse(localStorage.getItem("ss_prof")) || defProfile;
+        let products = JSON.parse(localStorage.getItem("ss_prods")) || defProducts;
+        let bookings = JSON.parse(localStorage.getItem("ss_books")) || [];
 
-        function saveStorage() {
-            localStorage.setItem("ss_pro_products", JSON.stringify(products));
-            localStorage.setItem("ss_pro_bookings", JSON.stringify(bookings));
+        let selProd = null;
+        let photoIdx = 0;
+        let bookType = "Rent";
+        let advAmt = 500;
+        let editPhotos = [];
+        let newUploaded = [];
+        let lastBooking = null;
+
+        function save() {
+            localStorage.setItem("ss_prof", JSON.stringify(profile));
+            localStorage.setItem("ss_prods", JSON.stringify(products));
+            localStorage.setItem("ss_books", JSON.stringify(bookings));
         }
 
-        function toggleLang() {
-            currentLang = currentLang === "hi" ? "en" : "hi";
-            document.getElementById("langTxt").innerText = currentLang === "hi" ? "English" : "हिंदी";
-            renderFeed();
+        function initProfile() {
+            document.getElementById("hdrShop").innerText = profile.shop;
+            document.getElementById("profShop").value = profile.shop;
+            document.getElementById("profOwner").value = profile.owner;
+            document.getElementById("profPhone").value = profile.phone;
+            document.getElementById("profAddress").value = profile.address;
+            document.getElementById("profUpi").value = profile.upi;
+
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${profile.upi}&pn=${profile.shop}&cu=INR`)}`;
+            document.getElementById("profileQrImg").src = qrUrl;
+            document.getElementById("checkoutQr").src = qrUrl;
         }
 
-        // Render Product Cards
-        function renderFeed(cat = "All") {
-            const grid = document.getElementById("productGrid");
+        function saveProfile(e) {
+            e.preventDefault();
+            profile.shop = document.getElementById("profShop").value;
+            profile.owner = document.getElementById("profOwner").value;
+            profile.phone = document.getElementById("profPhone").value;
+            profile.address = document.getElementById("profAddress").value;
+            profile.upi = document.getElementById("profUpi").value || "pay@upi";
+            save();
+            initProfile();
+            alert("प्रोफाइल व QR सुरक्षित हो गया!");
+        }
+
+        // Render Catalog
+        function renderCatalog(cat = "All") {
+            const grid = document.getElementById("catalogGrid");
             grid.innerHTML = "";
+            const search = document.getElementById("searchInput").value.toLowerCase();
 
-            const items = cat === "All" ? products : products.filter(p => p.category === cat);
+            let items = cat === "All" ? products : products.filter(p => p.category === cat);
+            if (search) items = items.filter(p => p.title.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+
+            if (!items.length) {
+                grid.innerHTML = `<div class="text-center py-10 text-gray-400 text-xs">कोई सामान नहीं मिला।</div>`;
+                return;
+            }
 
             items.forEach(p => {
                 const card = document.createElement("div");
-                card.className = "luxury-card rounded-2xl overflow-hidden";
+                card.className = "bg-white rounded-2xl border border-[#EFE6D8] overflow-hidden shadow-sm";
                 card.innerHTML = `
                     <div class="relative">
-                        <img src="${p.images[0]}" onclick="openBookingDetails(${p.id})" class="w-full h-72 object-cover cursor-pointer" alt="${p.title}">
-                        
-                        <!-- Like & Share Badges -->
+                        <img src="${p.images[0] || 'https://via.placeholder.com/600x400'}" onclick="openDetails(${p.id})" class="w-full h-72 object-cover cursor-pointer">
                         <div class="absolute top-3 right-3 flex flex-col gap-2">
-                            <button onclick="toggleLike(${p.id})" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 flex items-center justify-center shadow-md active:scale-90 transition">
-                                <i class="fa-solid fa-heart text-sm"></i>
+                            <button onclick="toggleLike(${p.id})" class="w-8 h-8 rounded-full bg-white/90 text-rose-600 flex items-center justify-center shadow">
+                                <i class="${p.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
                             </button>
-                            <button onclick="shareProductWhatsApp(${p.id})" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm text-emerald-600 flex items-center justify-center shadow-md active:scale-90 transition">
+                            <button onclick="shareWhatsApp(${p.id})" class="w-8 h-8 rounded-full bg-white/90 text-emerald-600 flex items-center justify-center shadow">
                                 <i class="fa-brands fa-whatsapp text-base"></i>
                             </button>
                         </div>
-
-                        <span class="absolute bottom-3 left-3 bg-white/90 text-amber-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
-                            ${p.category}
-                        </span>
-                        <span class="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full">
-                            <i class="fa-solid fa-images"></i> ${p.images.length} फ़ोटो
-                        </span>
+                        ${p.isSold ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">SOLD OUT</span>' : ''}
+                        <span class="absolute bottom-3 left-3 bg-white/90 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">${p.category}</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full"><i class="fa-solid fa-images"></i> ${p.images.length}</span>
                     </div>
-
                     <div class="p-4">
                         <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-gray-900 text-base leading-snug cursor-pointer" onclick="openBookingDetails(${p.id})">${p.title}</h3>
-                            <span class="text-xs text-rose-600 font-bold shrink-0 ml-2">❤️ ${p.likes || 0}</span>
+                            <h3 class="font-bold text-gray-900 text-base cursor-pointer" onclick="openDetails(${p.id})">${p.title}</h3>
+                            <span class="text-xs text-rose-600 font-bold shrink-0 ml-2">❤️ ${p.likes}</span>
                         </div>
                         <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.desc || ''}</p>
-
-                        <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-gray-100 text-xs">
-                            <div>
-                                <span class="text-gray-400 block text-[10px] font-semibold">किराया मूल्य</span>
-                                <b class="text-[#8E1634] text-base">₹${p.rentPrice}</b>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-gray-400 block text-[10px] font-semibold">सेल मूल्य</span>
-                                <b class="text-emerald-700 text-base">₹${p.salePrice}</b>
-                            </div>
+                        <div class="grid grid-cols-2 gap-2 mt-3 pt-2 border-t text-xs">
+                            <div><span class="text-gray-400 block text-[10px]">किराया</span><b class="text-[#8E1634] text-base">₹${p.rentPrice}</b></div>
+                            <div class="text-right"><span class="text-gray-400 block text-[10px]">सेल</span><b class="text-emerald-700 text-base">₹${p.salePrice}</b></div>
                         </div>
-
-                        <div class="grid grid-cols-4 gap-2 mt-3">
-                            <button onclick="openBookingDetails(${p.id})" class="col-span-3 bg-[#8E1634] text-amber-100 py-2.5 rounded-xl font-bold text-xs shadow active:scale-95 transition">
-                                तारीख व पूरी डिटेल देखें
-                            </button>
-                            <button onclick="shareProductNative(${p.id})" class="bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center active:scale-95 transition" title="शेयर करें">
-                                <i class="fa-solid fa-share-nodes text-sm"></i>
-                            </button>
-                        </div>
+                        <button onclick="openDetails(${p.id})" class="w-full mt-3 bg-[#8E1634] text-amber-100 py-2.5 rounded-xl font-bold text-xs shadow">
+                            तारीख व पूरी डिटेल देखें
+                        </button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Category Filter
         function filterCat(cat) {
             document.querySelectorAll(".cat-pill").forEach(el => {
-                if (el.getAttribute("data-cat") === cat) {
-                    el.className = "cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shadow-sm border border-[#8E1634] shrink-0 font-semibold";
-                } else {
-                    el.className = "cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shadow-sm shrink-0 font-semibold";
-                }
+                el.className = el.dataset.cat === cat ? "cat-pill px-4 py-2 rounded-full bg-[#8E1634] text-amber-100 shrink-0 font-semibold" : "cat-pill px-4 py-2 rounded-full bg-white text-gray-700 border border-[#E7DAC7] shrink-0 font-semibold";
             });
-            renderFeed(cat);
+            renderCatalog(cat);
         }
 
-        // Toggle Like
+        // Like Button Working
         function toggleLike(id) {
             const p = products.find(x => x.id === id);
-            p.likes = (p.likes || 0) + 1;
-            saveStorage();
-            renderFeed();
+            p.liked = !p.liked;
+            p.likes += p.liked ? 1 : -1;
+            save();
+            renderCatalog();
         }
 
-        // Share Product on WhatsApp
-        function shareProductWhatsApp(id) {
+        // WhatsApp Share
+        function shareWhatsApp(id) {
             const p = products.find(x => x.id === id);
-            const text = `🌸 *शिवशक्ति लहंगा हाउस*\n\n👗 *${p.title}*\n🏷️ किराया: ₹${p.rentPrice}\n💰 सेल कीमत: ₹${p.salePrice}\n🛡️ सिक्योरिटी: ₹${p.security}\n\n👉 फ़ोटो व बुकिंग देखने के लिए यहाँ क्लिक करें:\n${window.location.href}`;
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+            const msg = `🌸 *${profile.shop}*\n👗 *${p.title}*\n🏷️ किराया: ₹${p.rentPrice} | सेल: ₹${p.salePrice}\n👉 देखें: ${window.location.href}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        function shareProductNative(id) {
-            const p = products.find(x => x.id === id);
-            if (navigator.share) {
-                navigator.share({
-                    title: p.title,
-                    text: `शिवशक्ति लहंगा हाउस - ${p.title} (किराया: ₹${p.rentPrice})`,
-                    url: window.location.href
-                });
-            } else {
-                shareProductWhatsApp(id);
-            }
-        }
+        // Booking Details
+        function openDetails(id) {
+            selProd = products.find(x => x.id === id);
+            photoIdx = 0;
+            bookType = "Rent";
+            advAmt = 500;
 
-        // Modal Open Details
-        function openBookingDetails(id) {
-            selectedProduct = products.find(x => x.id === id);
-            activePhotoIndex = 0;
-            currentBookingType = "Rent";
-            chosenAdvance = 500;
-
-            document.getElementById("modalTitle").innerText = selectedProduct.title;
-            document.getElementById("modalCat").innerText = selectedProduct.category;
-            document.getElementById("modalDesc").innerText = selectedProduct.desc || 'सुंदर और प्रीमियम डिज़ाइन';
-            document.getElementById("modalRent").innerText = `₹${selectedProduct.rentPrice}`;
-            document.getElementById("modalSale").innerText = `₹${selectedProduct.salePrice}`;
-            document.getElementById("modalSecurity").innerText = `₹${selectedProduct.security}`;
+            document.getElementById("mTitle").innerText = selProd.title;
+            document.getElementById("mCat").innerText = selProd.category;
+            document.getElementById("mDesc").innerText = selProd.desc || 'प्रीमियम डिज़ाइन';
+            document.getElementById("mRent").innerText = `₹${selProd.rentPrice}`;
+            document.getElementById("mSale").innerText = `₹${selProd.salePrice}`;
+            document.getElementById("mSecurity").innerText = `₹${selProd.security}`;
             
-            updateSliderUI();
-            setBookingType("Rent");
-            setAdvance(500);
+            updateSlider();
+            setType("Rent");
+            setAdv(500);
 
-            document.getElementById("selectedDate").value = "";
-            document.getElementById("availMessage").innerText = "";
+            document.getElementById("bookDate").value = "";
+            document.getElementById("availMsg").innerText = "";
             openModal("bookingModal");
         }
 
-        // Slider
-        function updateSliderUI() {
-            document.getElementById("sliderImg").src = selectedProduct.images[activePhotoIndex];
-            document.getElementById("photoCounter").innerText = `${activePhotoIndex + 1} / ${selectedProduct.images.length}`;
+        function updateSlider() {
+            document.getElementById("mImg").src = selProd.images[photoIdx] || 'https://via.placeholder.com/600x400';
+            document.getElementById("mCounter").innerText = `${photoIdx + 1} / ${selProd.images.length}`;
         }
-        function nextPhoto() {
-            activePhotoIndex = (activePhotoIndex + 1) % selectedProduct.images.length;
-            updateSliderUI();
-        }
-        function prevPhoto() {
-            activePhotoIndex = (activePhotoIndex - 1 + selectedProduct.images.length) % selectedProduct.images.length;
-            updateSliderUI();
+        function nextPhoto() { photoIdx = (photoIdx + 1) % selProd.images.length; updateSlider(); }
+        function prevPhoto() { photoIdx = (photoIdx - 1 + selProd.images.length) % selProd.images.length; updateSlider(); }
+        function openZoom() { document.getElementById("zImg").src = selProd.images[photoIdx]; openModal("zoomModal"); }
+
+        function setType(t) {
+            bookType = t;
+            document.getElementById("btnRent").className = t === "Rent" ? "py-2 rounded-xl border-2 font-bold border-[#8E1634] bg-rose-50 text-[#8E1634]" : "py-2 rounded-xl border-2 font-bold border-gray-200 text-gray-600";
+            document.getElementById("btnBuy").className = t === "Buy" ? "py-2 rounded-xl border-2 font-bold border-emerald-600 bg-emerald-50 text-emerald-800" : "py-2 rounded-xl border-2 font-bold border-gray-200 text-gray-600";
+            document.getElementById("dateBox").style.display = t === "Rent" ? "block" : "none";
+            calcDue();
         }
 
-        function openZoomImage() {
-            document.getElementById("zoomedImg").src = selectedProduct.images[activePhotoIndex];
-            openModal("zoomModal");
-        }
-
-        // Booking Controls
-        function setBookingType(type) {
-            currentBookingType = type;
-            const btnRent = document.getElementById("btnTypeRent");
-            const btnBuy = document.getElementById("btnTypeBuy");
-            const dateBox = document.getElementById("dateBox");
-
-            if (type === "Rent") {
-                btnRent.className = "py-2.5 rounded-xl border-2 font-bold border-[#8E1634] bg-rose-50 text-[#8E1634]";
-                btnBuy.className = "py-2.5 rounded-xl border-2 font-bold border-gray-200 text-gray-600";
-                dateBox.style.display = "block";
+        function checkDate() {
+            const d = document.getElementById("bookDate").value;
+            const el = document.getElementById("availMsg");
+            if (!d) return;
+            if (selProd.bookedDates.includes(d)) {
+                el.className = "text-[11px] font-bold mt-1.5 text-red-600";
+                el.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> यह तारीख पहले से बुक है!`;
             } else {
-                btnBuy.className = "py-2.5 rounded-xl border-2 font-bold border-emerald-600 bg-emerald-50 text-emerald-800";
-                btnRent.className = "py-2.5 rounded-xl border-2 font-bold border-gray-200 text-gray-600";
-                dateBox.style.display = "none";
-            }
-            updateCalculation();
-        }
-
-        function checkAvailabilityLive() {
-            const date = document.getElementById("selectedDate").value;
-            const msg = document.getElementById("availMessage");
-            if (!date) return;
-
-            if (selectedProduct.bookedDates.includes(date)) {
-                msg.className = "text-[11px] font-bold mt-1.5 text-red-600";
-                msg.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> यह तारीख पहले से बुक है! कृपया दूसरी तारीख चुनें।`;
-            } else {
-                msg.className = "text-[11px] font-bold mt-1.5 text-emerald-600";
-                msg.innerHTML = `<i class="fa-solid fa-circle-check"></i> उपलब्ध है! आप इस तारीख के लिए बुक कर सकते हैं।`;
+                el.className = "text-[11px] font-bold mt-1.5 text-emerald-600";
+                el.innerHTML = `<i class="fa-solid fa-circle-check"></i> उपलब्ध है! बुक कर सकते हैं।`;
             }
         }
 
-        function setAdvance(amt) {
-            chosenAdvance = amt;
-            document.getElementById("customAdvance").value = "";
-            document.querySelectorAll(".adv-chip").forEach(btn => {
-                if (btn.innerText === `₹${amt}`) {
-                    btn.className = "adv-chip py-2 rounded-lg border border-[#8E1634] bg-rose-50 font-bold text-[#8E1634]";
-                } else {
-                    btn.className = "adv-chip py-2 rounded-lg border border-gray-200 bg-white font-bold text-gray-700";
-                }
+        function setAdv(amt) {
+            advAmt = amt;
+            document.getElementById("customAdv").value = "";
+            document.querySelectorAll(".adv-btn").forEach(b => {
+                b.className = b.innerText === `₹${amt}` ? "adv-btn py-1.5 rounded-lg border border-[#8E1634] bg-rose-50 text-[#8E1634] font-bold" : "adv-btn py-1.5 rounded-lg border border-gray-200 bg-white font-bold";
             });
-            updateCalculation();
+            calcDue();
         }
 
-        function updateCalculation() {
-            const custom = Number(document.getElementById("customAdvance").value);
-            const advance = custom > 0 ? custom : chosenAdvance;
-            const total = currentBookingType === "Rent" ? selectedProduct.rentPrice : selectedProduct.salePrice;
-            const due = Math.max(0, total - advance);
-            document.getElementById("dueAmount").innerText = `₹${due}`;
+        function calcDue() {
+            const c = Number(document.getElementById("customAdv").value);
+            const finalAdv = c > 0 ? c : advAmt;
+            const total = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+            document.getElementById("dueAmount").innerText = `₹${Math.max(0, total - finalAdv)}`;
         }
 
-        // Handle Booking & Alert Owner on WhatsApp
-        function handleBookingSubmit(e) {
+        function handleBooking(e) {
             e.preventDefault();
-            const date = document.getElementById("selectedDate").value;
+            const date = document.getElementById("bookDate").value;
             const name = document.getElementById("custName").value;
             const phone = document.getElementById("custPhone").value;
-            const custom = Number(document.getElementById("customAdvance").value);
-            const finalAdvance = custom > 0 ? custom : chosenAdvance;
+            const custom = Number(document.getElementById("customAdv").value);
+            const finalAdv = custom > 0 ? custom : advAmt;
 
-            if (currentBookingType === "Rent" && selectedProduct.bookedDates.includes(date)) {
-                alert("यह तारीख पहले से बुक है, कृपया दूसरी तारीख चुनें!");
+            if (bookType === "Rent" && selProd.bookedDates.includes(date)) {
+                alert("यह तारीख बुक है!");
                 return;
             }
 
-            const total = currentBookingType === "Rent" ? selectedProduct.rentPrice : selectedProduct.salePrice;
-            const due = Math.max(0, total - finalAdvance);
+            const total = bookType === "Rent" ? selProd.rentPrice : selProd.salePrice;
+            const due = Math.max(0, total - finalAdv);
 
-            const record = {
-                id: Date.now(),
-                title: selectedProduct.title,
-                type: currentBookingType,
-                date: currentBookingType === "Rent" ? date : "Permanent Sale",
+            lastBooking = {
+                id: Date.now().toString().slice(-6),
+                title: selProd.title,
+                type: bookType,
+                date: bookType === "Rent" ? date : "खरीद",
                 customer: name,
                 phone: phone,
-                advance: finalAdvance,
-                security: selectedProduct.security,
+                advance: finalAdv,
+                security: selProd.security,
                 total: total,
-                due: due
+                due: due,
+                createdAt: new Date().toLocaleDateString('hi-IN')
             };
 
-            bookings.unshift(record);
-            if (currentBookingType === "Rent" && date) {
-                selectedProduct.bookedDates.push(date);
-            }
-            saveStorage();
+            bookings.unshift(lastBooking);
+            if (bookType === "Rent" && date) selProd.bookedDates.push(date);
+            save();
 
-            closeModal('bookingModal');
-            alert(`बधाई हो ${name}! आपकी बुकिंग दर्ज हो गई है। अब आपको दुकानदार के व्हाट्सएप पर सूचना भेजी जा रही है।`);
+            closeModal("bookingModal");
+            openInvoice(lastBooking);
 
-            // Notify Shop Owner directly via WhatsApp
-            const msg = `🔔 *नई ऑनलाइन बुकिंग अलर्ट - शिवशक्ति लहंगा हाउस*\n\n👗 सामान: ${selectedProduct.title}\n👤 ग्राहक: ${name}\n📞 मोबाइल: ${phone}\n📅 तारीख: ${record.date}\n💵 टोकन एडवांस: ₹${finalAdvance}\n💰 बाकी देय: ₹${due}`;
-            window.open(`https://api.whatsapp.com/send?phone=${OWNER_PHONE}&text=${encodeURIComponent(msg)}`, '_blank');
-
-            renderLedger();
+            // Alert Shop Owner on WhatsApp
+            const msg = `🔔 *नई बुकिंग ALERT - ${profile.shop}*\n👗 सामान: ${selProd.title}\n👤 ग्राहक: ${name} (${phone})\n📅 तारीख: ${lastBooking.date}\n💵 एडवांस जमा: ₹${finalAdv}\n💰 बाकी देय: ₹${due}`;
+            window.open(`https://api.whatsapp.com/send?phone=${profile.phone}&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Digital Khata Ledger & Reminders
-        function renderLedger() {
-            const list = document.getElementById("ledgerList");
+        // Invoice Receipt Logic
+        function openInvoice(b) {
+            document.getElementById("invShop").innerText = profile.shop;
+            document.getElementById("invPhone").innerText = `संपर्क: ${profile.phone}`;
+            document.getElementById("invAddr").innerText = profile.address;
+            document.getElementById("invId").innerText = `#${b.id}`;
+            document.getElementById("invDate").innerText = b.createdAt;
+            document.getElementById("invCust").innerText = b.customer;
+            document.getElementById("invPhoneCust").innerText = b.phone;
+            document.getElementById("invItem").innerText = b.title;
+            document.getElementById("invType").innerText = b.type;
+            document.getElementById("invEvent").innerText = b.date;
+            document.getElementById("invTotal").innerText = `₹${b.total}`;
+            document.getElementById("invAdv").innerText = `₹${b.advance}`;
+            document.getElementById("invDue").innerText = `₹${b.due}`;
+            document.getElementById("invSec").innerText = `₹${b.security}`;
+            openModal("invoiceModal");
+        }
+
+        function shareInvoice() {
+            if (!lastBooking) return;
+            const msg = `🧾 *रसीद: ${profile.shop}*\nरसीद सं: #${lastBooking.id}\nग्राहक: ${lastBooking.customer}\nसामान: ${lastBooking.title}\nतारीख: ${lastBooking.date}\nकुल: ₹${lastBooking.total}\nएडवांस: ₹${lastBooking.advance}\nबाकी: ₹${lastBooking.due}`;
+            window.open(`https://api.whatsapp.com/send?phone=91${lastBooking.phone}&text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Inventory Management (Edit, Delete, Remove Photo)
+        function renderInventory() {
+            const list = document.getElementById("inventoryList");
             list.innerHTML = "";
 
-            if (bookings.length === 0) {
-                list.innerHTML = `<div class="text-center py-10 text-gray-400 text-xs">अभी कोई बुकिंग दर्ज नहीं हुई है।</div>`;
-                return;
-            }
-
-            bookings.forEach(b => {
-                const item = document.createElement("div");
-                item.className = "bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-2 text-xs";
-                item.innerHTML = `
-                    <div class="flex justify-between items-start">
+            products.forEach(p => {
+                const row = document.createElement("div");
+                row.className = "bg-white p-3 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between text-xs";
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${p.images[0] || 'https://via.placeholder.com/80'}" class="w-14 h-14 object-cover rounded-xl border">
                         <div>
-                            <span class="font-bold text-gray-900 text-sm">${b.title}</span>
-                            <div class="text-gray-500 mt-0.5"><i class="fa-solid fa-user text-[#8E1634]"></i> ${b.customer} (${b.phone})</div>
+                            <b class="text-gray-900 block">${p.title}</b>
+                            <span class="text-gray-500">${p.category} | रेंट: ₹${p.rentPrice}</span>
+                            ${p.isSold ? '<span class="text-red-600 font-bold block">SOLD OUT</span>' : ''}
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${b.type === 'Rent' ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'}">${b.type}</span>
                     </div>
-
-                    <div class="p-2.5 bg-[#FAF6F0] rounded-xl flex justify-between items-center text-[11px] border border-[#E7DAC7]">
-                        <div>तारीख: <b>${b.date}</b></div>
-                        <div>टोकन जमा: <b class="text-emerald-700">₹${b.advance}</b></div>
-                    </div>
-
-                    <div class="flex justify-between text-gray-600 pt-1 border-t text-[11px]">
-                        <span>सिक्योरिटी: ₹${b.security}</span>
-                        <span>बकाया राशि: <b class="text-[#8E1634]">₹${b.due}</b></span>
-                    </div>
-
-                    <!-- Reminder Buttons -->
-                    <div class="grid grid-cols-2 gap-2 pt-2">
-                        <button onclick="sendReminderWhatsApp('${b.phone}', '${b.customer}', '${b.title}', '${b.due}', '${b.date}')" class="bg-emerald-50 text-emerald-800 border border-emerald-300 py-1.5 rounded-lg font-bold flex items-center justify-center gap-1">
-                            <i class="fa-brands fa-whatsapp"></i> WhatsApp रिमाइंडर
-                        </button>
-                        <button onclick="sendReminderSMS('${b.phone}', '${b.customer}', '${b.title}', '${b.due}', '${b.date}')" class="bg-blue-50 text-blue-800 border border-blue-300 py-1.5 rounded-lg font-bold flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-comment-sms"></i> SMS रिमाइंडर
-                        </button>
+                    <div class="flex gap-1.5">
+                        <button onclick="editProduct(${p.id})" class="bg-gray-100 hover:bg-gray-200 text-gray-800 p-2 rounded-lg" title="एडिट करें"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="toggleSold(${p.id})" class="bg-amber-100 text-amber-900 p-2 rounded-lg font-bold" title="सोल्ड मार्क करें">${p.isSold ? 'अनसोल्ड' : 'सोल्ड'}</button>
+                        <button onclick="deleteProduct(${p.id})" class="bg-rose-100 text-rose-700 p-2 rounded-lg" title="हटाएं"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-                list.appendChild(item);
+                list.appendChild(row);
             });
         }
 
-        // WhatsApp & SMS Reminders
-        function sendReminderWhatsApp(phone, name, item, due, date) {
-            const msg = `नमस्ते ${name} जी! 🙏\n\n*शिवशक्ति लहंगा हाउस* से आपका आर्डर *${item}* दिनांक *${date}* के लिए बुक है।\n\nबकाया राशि: *₹${due}* कार्यक्रम से पूर्व जमा करवाएं।\nधन्यवाद!`;
-            window.open(`https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(msg)}`, '_blank');
+        function toggleSold(id) {
+            const p = products.find(x => x.id === id);
+            p.isSold = !p.isSold;
+            save();
+            renderInventory();
+            renderCatalog();
         }
 
-        function sendReminderSMS(phone, name, item, due, date) {
-            const msg = `Namaste ${name} ji! Shiv Shakti Lehenga House se aapka order ${item} (${date}) booked hai. Pending balance: Rs.${due}. Dhanyawad.`;
-            window.open(`sms:${phone}?body=${encodeURIComponent(msg)}`, '_self');
+        function deleteProduct(id) {
+            if (confirm("क्या आप सच में इस प्रोडक्ट को हटाना चाहते हैं?")) {
+                products = products.filter(x => x.id !== id);
+                save();
+                renderInventory();
+                renderCatalog();
+            }
         }
 
-        // Direct Compressed Image Processing
-        function processSelectedImages(event) {
+        function openProductModal() {
+            document.getElementById("editId").value = "";
+            document.getElementById("pModalTitle").innerText = "नया प्रोडक्ट जोड़ें";
+            document.getElementById("pTitle").value = "";
+            document.getElementById("pCat").value = "लहंगा";
+            document.getElementById("pDesc").value = "";
+            document.getElementById("pRent").value = "";
+            document.getElementById("pSale").value = "";
+            document.getElementById("pSec").value = "";
+            editPhotos = [];
+            newUploaded = [];
+            renderPhotosInModal();
+            document.getElementById("newPreview").innerHTML = "";
+            openModal("productModal");
+        }
+
+        function editProduct(id) {
+            const p = products.find(x => x.id === id);
+            document.getElementById("editId").value = p.id;
+            document.getElementById("pModalTitle").innerText = "प्रोडक्ट एडिट करें";
+            document.getElementById("pTitle").value = p.title;
+            document.getElementById("pCat").value = p.category;
+            document.getElementById("pDesc").value = p.desc || "";
+            document.getElementById("pRent").value = p.rentPrice;
+            document.getElementById("pSale").value = p.salePrice;
+            document.getElementById("pSec").value = p.security;
+            editPhotos = [...p.images];
+            newUploaded = [];
+            renderPhotosInModal();
+            document.getElementById("newPreview").innerHTML = "";
+            openModal("productModal");
+        }
+
+        // Render & Delete Individual Photo (Red Cross ❌)
+        function renderPhotosInModal() {
+            const box = document.getElementById("curPhotos");
+            box.innerHTML = "";
+            if (!editPhotos.length) {
+                box.innerHTML = `<span class="text-gray-400 text-[10px]">कोई फ़ोटो नहीं है।</span>`;
+                return;
+            }
+            editPhotos.forEach((img, i) => {
+                const wrap = document.createElement("div");
+                wrap.className = "relative shrink-0";
+                wrap.innerHTML = `
+                    <img src="${img}" class="w-14 h-14 object-cover rounded-lg border">
+                    <button type="button" onclick="removePhoto(${i})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px] shadow" title="यह फोटो हटाएं">❌</button>
+                `;
+                box.appendChild(wrap);
+            });
+        }
+
+        function removePhoto(idx) {
+            editPhotos.splice(idx, 1);
+            renderPhotosInModal();
+        }
+
+        // Compress Multiple Photos from Phone
+        function processFiles(event) {
             const files = event.target.files;
-            compressedImages = [];
-            const preview = document.getElementById("uploadPreview");
+            newUploaded = [];
+            const preview = document.getElementById("newPreview");
             preview.innerHTML = "";
 
-            if (!files.length) return;
-
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+            Array.from(files).forEach(f => {
+                const r = new FileReader();
+                r.onload = e => {
                     const img = new Image();
                     img.src = e.target.result;
-                    img.onload = function() {
+                    img.onload = () => {
                         const canvas = document.createElement("canvas");
                         const ctx = canvas.getContext("2d");
-                        const maxWidth = 800;
-                        const scale = maxWidth / img.width;
-                        canvas.width = maxWidth;
+                        const maxW = 700;
+                        const scale = maxW / img.width;
+                        canvas.width = maxW;
                         canvas.height = img.height * scale;
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const compressedData = canvas.toDataURL("image/jpeg", 0.75);
-                        compressedImages.push(compressedData);
+                        const compressed = canvas.toDataURL("image/jpeg", 0.7);
+                        newUploaded.push(compressed);
 
                         const thumb = document.createElement("img");
-                        thumb.src = compressedData;
+                        thumb.src = compressed;
                         thumb.className = "w-14 h-14 object-cover rounded-lg border border-amber-400 shrink-0";
                         preview.appendChild(thumb);
                     };
                 };
-                reader.readAsDataURL(file);
+                r.readAsDataURL(f);
             });
         }
 
-        function handleProductUpload(e) {
+        function saveProduct(e) {
             e.preventDefault();
-            if (compressedImages.length === 0) {
-                alert("कृपया मोबाइल गैलरी से फ़ोटो ज़रूर चुनें!");
+            const id = document.getElementById("editId").value;
+            const finalPhotos = [...editPhotos, ...newUploaded];
+
+            if (!finalPhotos.length) {
+                alert("कृपया कम से कम 1 फ़ोटो ज़रूर रखें!");
                 return;
             }
 
-            const item = {
-                id: Date.now(),
-                title: document.getElementById("newTitle").value,
-                category: document.getElementById("newCat").value,
-                desc: document.getElementById("newDesc").value || "प्रीमियम कलेक्शन",
-                rentPrice: Number(document.getElementById("newRent").value),
-                salePrice: Number(document.getElementById("newSale").value),
-                security: Number(document.getElementById("newSec").value),
-                likes: 1,
-                images: compressedImages,
-                bookedDates: []
+            const data = {
+                title: document.getElementById("pTitle").value,
+                category: document.getElementById("pCat").value,
+                desc: document.getElementById("pDesc").value,
+                rentPrice: Number(document.getElementById("pRent").value),
+                salePrice: Number(document.getElementById("pSale").value),
+                security: Number(document.getElementById("pSec").value),
+                images: finalPhotos
             };
 
-            products.unshift(item);
-            saveStorage();
-            closeModal('uploadModal');
-            renderFeed();
-            alert("बधाई! आपका नया सामान सभी फ़ोटो के साथ सफलतापूर्वक सेव हो गया है।");
-        }
-
-        function contactStoreWhatsApp() {
-            window.open(`https://api.whatsapp.com/send?phone=${OWNER_PHONE}&text=${encodeURIComponent("नमस्ते शिवशक्ति लहंगा हाउस! मुझे आपके कलेक्शन के बारे में जानकारी चाहिए।")}`, '_blank');
-        }
-
-        function switchTab(t) {
-            const cust = document.getElementById("customerTab");
-            const admin = document.getElementById("adminTab");
-            const bHome = document.getElementById("btnNavShop");
-            const bKhata = document.getElementById("btnNavKhata");
-
-            if (t === "customer") {
-                cust.classList.remove("hidden");
-                admin.classList.add("hidden");
-                bHome.className = "flex flex-col items-center text-[#8E1634] font-bold";
-                bKhata.className = "flex flex-col items-center text-gray-400 font-medium";
+            if (id) {
+                const p = products.find(x => x.id === Number(id));
+                Object.assign(p, data);
             } else {
-                cust.classList.add("hidden");
-                admin.classList.remove("hidden");
-                bKhata.className = "flex flex-col items-center text-[#8E1634] font-bold";
-                bHome.className = "flex flex-col items-center text-gray-400 font-medium";
-                renderLedger();
+                products.unshift({
+                    id: Date.now(),
+                    ...data,
+                    likes: 1,
+                    liked: false,
+                    isSold: false,
+                    bookedDates: []
+                });
             }
+
+            save();
+            closeModal("productModal");
+            renderInventory();
+            renderCatalog();
+            alert("प्रोडक्ट सुरक्षित हो गया!");
         }
 
-        function openModal(id) { document.getElementById(id).classList.remove("hidden"); }
-        function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+        // Khata & Reminders
+        function renderKhata() {
+            const list = document.getElementById("ledgerList");
+            list.innerHTML = "";
+
+            if (!bookings.length) {
+                list.innerHTML = `<div class="text-center py-10 text-gray-400 text-xs">अभी कोई बुकिंग नहीं है।</div>`;
+                return;
+            }
+
+            bookings.forEach(b => {
+                const row = document.createElement("div");
+                row.className = "bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-2 text-xs";
+                row.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-gray-900 text-sm">${b.title}</span>
+                            <div class="text-gray-500">${b.customer} (${b.phone})</div>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">${b.type}</span>
+                    </div>
+                    <div class="p-2 bg-[#FAF6F0] rounded-xl flex justify-between text-[11px] border border-[#E7DAC7]">
+                        <span>तारीख: <b>${b.date}</b></span>
+                        <span>टोकन जमा: <b class="text-emerald-700">₹${b.advance}</b></span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 pt-1 border-t text-[11px]">
+                        <span>सिक्योरिटी: ₹${b.security}</span>
+                        <span>बकाया: <b class="text-[#8E1634]">₹${b.due}</b></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="sendWA('${b.phone}','${b.customer}','${b.title}','${b.due}','${b.date}')" class="bg-emerald-50 text-emerald-800 border border-emerald-300 py-1.5 rounded-lg font-bold">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button onclick="sendSMS('${b.phone}','${b.customer}','${b.title}','${b.due}','${b.date}')" class="bg-blue-50 text-blue-800 border border-blue-300 py-1.5 rounded-lg font-bold">
+                            <i class="fa-solid fa-comment-sms"></i> SMS
+                        </button>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function sendWA(phone, name, item, due, date) {
+            const msg = `नमस्ते ${name} जी! 🙏\n*${profile.shop}* से आपका आर्डर *${item}* दिनांक *${date}* के लिए बुक है।\nबकाया राशि: *₹${due}*\nधन्यवाद!`;
+            window.open(`https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function sendSMS(phone, name, item, due, date) {
+            window.open(`sms:${phone}?body=${encodeURIComponent(`Namaste ${name} ji! ${profile.shop} se order ${item} (${date}) booked hai. Pending: Rs.${due}.`)}`, '_self');
+        }
+
+        // Navigation Switcher
+        function switchTab(t) {
+            ['Catalog', 'Inventory', 'Khata', 'Profile'].forEach(x => {
+                document.getElementById(`tab${x}`).classList.add('hidden');
+                document.getElementById(`nav${x}`).className = "flex flex-col items-center text-gray-400 font-medium";
+            });
+            const cap = t.charAt(0).toUpperCase() + t.slice(1);
+            document.getElementById(`tab${cap}`).classList.remove('hidden');
+            document.getElementById(`nav${cap}`).className = "flex flex-col items-center text-[#8E1634] font-bold";
+
+            if (t === 'catalog') renderCatalog();
+            if (t === 'inventory') renderInventory();
+            if (t === 'khata') renderKhata();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
         // Start
-        renderFeed();
+        initProfile();
+        renderCatalog();
     </script>
 </body>
 </html>
